@@ -1216,6 +1216,25 @@ const StickyCTA = () => {
 
 // Main App Component
 function App() {
+
+  useEffect(() => {
+    const removeBadge = () => {
+      document.querySelectorAll('*').forEach(el => {
+        if (
+          el.innerText &&
+          el.innerText.toLowerCase().includes('emergent')
+        ) {
+          el.remove();
+        }
+      });
+    };
+
+    removeBadge();
+    const interval = setInterval(removeBadge, 500);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#050505]">
       {/* Noise overlay */}
