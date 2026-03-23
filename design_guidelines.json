@@ -1,0 +1,201 @@
+{
+  "theme": "dark",
+  "typography": {
+    "headings": {
+      "family": "Outfit",
+      "weights": ["300", "500", "800"],
+      "tracking": "tracking-tight",
+      "line_height": "leading-none",
+      "description": "Tech-forward, authoritative yet approachable. Extreme contrast in weights (Light for modifiers, Black for keywords)."
+    },
+    "body": {
+      "family": "Manrope",
+      "weights": ["400", "500"],
+      "tracking": "tracking-normal",
+      "line_height": "leading-relaxed",
+      "description": "Highly readable, geometric sans."
+    },
+    "labels": {
+      "family": "Outfit",
+      "weights": ["700"],
+      "tracking": "tracking-[0.2em]",
+      "text_transform": "uppercase",
+      "size": "text-xs"
+    }
+  },
+  "colors": {
+    "primary": {
+      "base": "#EAB308",
+      "hover": "#FDE047",
+      "active": "#CA8A04",
+      "description": "Bright Cyber Yellow. Used strictly for CTAs to create high contrast against dark backgrounds."
+    },
+    "background": {
+      "base": "#050505",
+      "surface": "#0A0A0A",
+      "surface_elevated": "#121212",
+      "description": "Deepest void black. Not purely #000, slightly tinted for depth."
+    },
+    "text": {
+      "primary": "#FFFFFF",
+      "secondary": "#A1A1AA",
+      "muted": "#71717A"
+    },
+    "accent": {
+      "blue": "#3B82F6",
+      "green": "#22C55E",
+      "description": "Used sparsely for glowing nodes, map pins, and data visualizations."
+    },
+    "border": {
+      "default": "rgba(255, 255, 255, 0.1)",
+      "highlight": "rgba(255, 255, 255, 0.2)"
+    }
+  },
+  "spacing": {
+    "container_padding": "px-6 md:px-12 lg:px-24",
+    "section_gap": "py-24 md:py-32 lg:py-40",
+    "element_gap": "gap-8 md:gap-12 lg:gap-16",
+    "philosophy": "Generous Spacing Philosophy. Use 2-3x more spacing than typical designs to give breathing room. Emphasize emptiness to draw focus to the copy and CTA."
+  },
+  "components": {
+    "buttons": {
+      "cta": {
+        "bg": "bg-yellow-500",
+        "text": "text-black",
+        "hover": "hover:bg-yellow-400 hover:text-black",
+        "radius": "rounded-full",
+        "padding": "px-8 py-4",
+        "font": "font-bold text-lg tracking-tight",
+        "animation": "transition-transform hover:-translate-y-1 active:translate-y-0",
+        "shadow": "shadow-[0_0_30px_rgba(234,179,8,0.3)] hover:shadow-[0_0_40px_rgba(234,179,8,0.5)]"
+      },
+      "secondary": {
+        "bg": "bg-transparent",
+        "text": "text-white",
+        "border": "border border-white/20",
+        "hover": "hover:bg-white/5 hover:border-white/40",
+        "radius": "rounded-full",
+        "padding": "px-6 py-3"
+      }
+    },
+    "cards": {
+      "bento": {
+        "bg": "bg-[#0A0A0A]",
+        "border": "border border-white/10",
+        "radius": "rounded-3xl",
+        "padding": "p-8 md:p-12",
+        "hover": "hover:border-white/20 transition-colors duration-300",
+        "shadow": "shadow-2xl"
+      },
+      "pricing": {
+        "bg": "bg-gradient-to-b from-[#121212] to-[#0A0A0A]",
+        "border": "border border-yellow-500/30",
+        "radius": "rounded-3xl",
+        "padding": "p-12",
+        "highlight": "relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-yellow-500/10 before:to-transparent"
+      }
+    },
+    "header": {
+      "bg": "bg-black/60",
+      "blur": "backdrop-blur-xl",
+      "border": "border-b border-white/10",
+      "position": "fixed top-0 w-full z-50"
+    }
+  },
+  "layout": {
+    "grid_system": "The Bento Grid Protocol (Tetris Mode)",
+    "description": "Asymmetry creates tension. Use 12-column grids with varying span widths (e.g., col-span-8 and col-span-4) to prevent boring perfectly symmetrical layouts."
+  },
+  "visual_enhancers": {
+    "textures": "Subtle noise overlay on the entire body to kill digital flatness.",
+    "glows": "Soft, blurred radial gradients behind key elements (like the hero text and CTA) to create a 'Tracing Beam' effect.",
+    "glassmorphism": "Used for sticky header and floating elements. Must include 1px delicate inner stroke to separate from background."
+  },
+  "motion": {
+    "scroll": "Smooth scrolling via lenis.",
+    "entrance": "Staggered fade-up for bento grid items and text. Use Framer Motion.",
+    "micro_interactions": "Hover lifts on cards, glow intensification on CTA buttons.",
+    "parallax": "Subtle parallax on background abstract elements."
+  },
+  "media": {
+    "images": [
+      {
+        "url": "https://images.unsplash.com/photo-1602731465517-820d34d5a9c3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1Mjh8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGdsb3dpbmclMjBtYXAlMjBub2Rlc3xlbnwwfHx8fDE3NzQyOTA5NjB8MA&ixlib=rb-4.1.0&q=85",
+        "category": "hero_background",
+        "description": "Abstract glowing map nodes, used as a subtle, low-opacity background behind the hero section to represent AI and location data."
+      },
+      {
+        "url": "https://images.pexels.com/photos/10375895/pexels-photo-10375895.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "category": "social_proof",
+        "description": "Joyful business owners. Used in the problem/solution transition to show successful clients."
+      },
+      {
+        "url": "https://images.pexels.com/photos/6077664/pexels-photo-6077664.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "category": "testimonial_portrait",
+        "description": "Portrait of a happy businessman. Used for the HVAC or Plumber testimonial."
+      },
+      {
+        "url": "https://images.pexels.com/photos/36499769/pexels-photo-36499769.png?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "category": "testimonial_portrait",
+        "description": "Smiling woman wearing a blazer. Used for the Dentist or Lawyer testimonial."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1714859100390-7f3a57e5ae74?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzJ8MHwxfHNlYXJjaHwyfHxsb2NhbCUyMGJ1c2luZXNzJTIwb3duZXIlMjB0YWJsZXR8ZW58MHx8fHwxNzc0MjkwOTU5fDA&ixlib=rb-4.1.0&q=85",
+        "category": "feature_showcase",
+        "description": "Person holding a tablet. Used to illustrate receiving and viewing the AI Visibility Report."
+      }
+    ]
+  },
+  "sections": [
+    {
+      "name": "Header",
+      "features": ["Logo", "Sticky CTA: 'Get Your Report'"]
+    },
+    {
+      "name": "Hero",
+      "features": ["Headline: 'Is AI Stealing Your Local Customers?'", "Subheadline: 'In 2026, standard SEO is dead. See exactly how AI Search Engines (ChatGPT, Google SGE) rank your business with the GEO Boost Engine.'", "Primary CTA: 'Get My $199 AI Visibility Report'", "Social Proof snippet: 'Trusted by 500+ local businesses.'"]
+    },
+    {
+      "name": "Problem Agitation",
+      "layout": "Bento Grid",
+      "features": ["Statistic: '68% of local searches now happen via AI Assistants.'", "Visual: Map with faded out pins (representing invisible businesses).", "Pain point: 'If AI doesn't know you, you don't exist.'"]
+    },
+    {
+      "name": "How It Works",
+      "features": ["Step 1: Deep AI Audit", "Step 2: Competitive Matrix", "Step 3: Actionable Domination Plan"]
+    },
+    {
+      "name": "Value Stack / Pricing",
+      "features": ["Card highlighting the $199 value", "List of deliverables: Keyword AI mapping, Sentiment Analysis, Competitor Gap Report", "Urgency: 'Only 50 reports generated per week.'"]
+    },
+    {
+      "name": "Social Proof & Guarantee",
+      "features": ["Testimonials with real faces", "100% Money-Back Guarantee badge (Risk Reversal)"]
+    },
+    {
+      "name": "Final CTA",
+      "features": ["Massive headline", "Primary CTA button"]
+    }
+  ],
+  "instructions_to_main_agent": [
+    "Use framer-motion for all scroll and entrance animations.",
+    "Implement Lucide-react for icons.",
+    "Ensure the hero CTA is always visible or easily accessible (sticky header).",
+    "Use raw HTML and Tailwind for layout structures. Do not use restrictive UI library wrappers for main sections.",
+    "Ensure contrast passes APCA standards. Do not put grey text on dark grey backgrounds if it fails contrast.",
+    "Add a subtle grain texture (`url('/noise.png')` or SVG filter) to the background to make the dark theme feel premium, not plastic."
+  ],
+  "universal_guidelines": [
+    "Do not converge toward generic, 'on distribution' outputs. Avoid the 'AI slop' aesthetic.",
+    "Create depth through layered design elements with z-index hierarchy.",
+    "Use glass-morphism effects with backdrop filters (12-24px blur) where appropriate, always with a subtle border.",
+    "You MUST NOT apply universal transition (e.g., `transition: all`).",
+    "You MUST NOT center align the app container in CSS.",
+    "Always use modern button styles like pill-shaped with interaction animations.",
+    "NEVER use emoji characters for icons.",
+    "Every interaction needs micro-animations - hover states, transitions.",
+    "Use 2-3x more spacing than feels comfortable.",
+    "All interactive and key informational elements MUST include a `data-testid` attribute.",
+    "Do not use complete `transparent` background in header or overlays. Ensure content under them is readable via blur or solid bg."
+  ]
+}
