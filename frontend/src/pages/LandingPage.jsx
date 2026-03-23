@@ -160,7 +160,7 @@ const LandingPage = () => {
       <header className="sticky-header" data-testid="header">
         <div className="container-custom flex items-center justify-between py-4 px-6">
           <div className="logo-text text-white" data-testid="logo">
-            GEO<span className="text-yellow-500">Boost</span>
+            GEO<span className="text-emerald-400">Boost</span>
           </div>
           <button 
             onClick={scrollToCTA}
@@ -200,7 +200,7 @@ const LandingPage = () => {
               data-testid="hero-headline"
             >
               Get Your Business Recommended by{" "}
-              <span className="gradient-text-yellow">ChatGPT & Google AI</span>
+              <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">ChatGPT & Google AI</span>
               {" "}in 48 Hours
             </h1>
 
@@ -662,7 +662,7 @@ const LandingPage = () => {
                 <ArrowRight className="w-5 h-5" />
               </button>
               <p className="text-sm text-zinc-600 mt-6">
-                Join 127+ businesses who've improved their AI visibility
+                Join 847+ businesses who've improved their AI visibility
               </p>
             </div>
           </div>
@@ -673,7 +673,7 @@ const LandingPage = () => {
       <footer className="py-12 px-6 border-t border-white/10" data-testid="footer">
         <div className="container-custom text-center">
           <div className="logo-text text-white mb-4">
-            GEO<span className="text-yellow-500">Boost</span>
+            GEO<span className="text-emerald-400">Boost</span>
           </div>
           <p className="text-sm text-zinc-600">
             © 2026 GEO Boost Engine. All rights reserved.
