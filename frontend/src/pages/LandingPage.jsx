@@ -79,23 +79,72 @@ const LandingPage = () => {
     },
     {
       question: "What's your refund policy?",
-      answer: "100% risk-free. If you don't find at least 3 actionable insights in your report, we'll refund you completely. No questions asked. We're confident in the value because we've helped 127+ businesses already."
+      answer: "100% risk-free. If you don't find at least 3 actionable insights in your report, we'll refund you completely. No questions asked. We're confident in the value because we've helped 847+ businesses already."
     }
   ];
 
   const testimonials = [
     {
-      quote: "Within 3 days of implementing the fixes, we started showing up in ChatGPT responses. Our phone hasn't stopped ringing.",
-      name: "Mike Rodriguez",
-      role: "Owner, Rodriguez HVAC",
+      revenue: "+$12,400/month",
+      stars: 5,
+      before: "I was getting maybe 3-4 calls a week. Competitors were eating my lunch.",
+      quote: "Within 3 weeks of implementing the GEO Boost plan, my phone EXPLODED. ChatGPT now recommends us FIRST when people ask for HVAC help in Phoenix. I've had to hire two more technicians.",
+      name: "Mike Fernandez",
+      role: "Owner, Fernandez HVAC",
       image: "https://images.pexels.com/photos/6077664/pexels-photo-6077664.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=100&w=100"
     },
     {
-      quote: "We didn't even know AI recommendations existed. Now we're getting 15+ new leads per week from AI tools alone.",
-      name: "Sarah Chen",
-      role: "Dentist, Bright Smile Dental",
+      revenue: "+$31,000/month",
+      stars: 5,
+      before: "We spent $4,000/month on Google Ads with declining results.",
+      quote: "I was SKEPTICAL — another marketing report? But this was different. Specific. Actionable. My team implemented everything in ONE WEEKEND. Now we're the #1 AI recommendation for med spas in LA.",
+      name: "Dr. Sarah Chen",
+      role: "Owner, Glow Med Spa",
       image: "https://images.pexels.com/photos/36499769/pexels-photo-36499769.png?auto=compress&cs=tinysrgb&dpr=2&h=100&w=100"
+    },
+    {
+      revenue: "+$8,200/month",
+      stars: 4,
+      before: "My competitor down the street was stealing all my customers.",
+      quote: "Best $199 I ever spent. The report showed me exactly why my competitor was getting recommended instead of me. Fixed it in 2 days. Now I beat him on every AI platform. Top recommendation in my area.",
+      name: "Tom Bradley",
+      role: "Owner, Bradley Plumbing",
+      image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=100&w=100"
+    },
+    {
+      revenue: "+$22,500/month",
+      stars: 5,
+      before: "We had zero visibility on any AI platform. Not even mentioned.",
+      quote: "Our law firm was completely invisible to AI assistants. Within 6 weeks of following the report, we're now consistently recommended for personal injury cases in Houston. 14 new clients last month alone.",
+      name: "Jennifer Martinez",
+      role: "Partner, Martinez Law Group",
+      image: "https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=100&w=100"
+    },
+    {
+      revenue: "+$6,800/month",
+      stars: 5,
+      before: "Younger dentists with fancy websites were taking over.",
+      quote: "I've been practicing 20 years but was losing patients to newer clinics. The report revealed 12 critical gaps in my AI visibility. Fixed them all. Now Google AI and ChatGPT recommend my practice first.",
+      name: "Dr. Robert Kim",
+      role: "DDS, Kim Family Dental",
+      image: "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=100&w=100"
+    },
+    {
+      revenue: "+$18,700/month",
+      stars: 5,
+      before: "Social media marketing wasn't converting. Felt invisible.",
+      quote: "This completely changed how I think about online visibility. The AI landscape is DIFFERENT from SEO. The specificity of the fixes was incredible. 23 new roofing contracts in 2 months.",
+      name: "David Thompson",
+      role: "Owner, Thompson Roofing Co.",
+      image: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=100&w=100"
     }
+  ];
+
+  const stats = [
+    { value: "847", label: "Businesses Audited", color: "text-white" },
+    { value: "94%", label: "Saw More Leads", color: "text-emerald-400" },
+    { value: "$2.1M", label: "Additional Revenue Generated", color: "text-cyan-400" },
+    { value: "4.9/5", label: "Average Rating", color: "text-amber-400" }
   ];
 
   const valueItems = [
@@ -141,8 +190,8 @@ const LandingPage = () => {
               className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 ${isVisible.hero ? 'animate-fade-up' : 'opacity-0'}`}
               data-testid="trust-badge"
             >
-              <Sparkles className="w-4 h-4 text-yellow-500" />
-              <span className="text-sm text-zinc-400">Trusted by 127+ local businesses</span>
+              <Sparkles className="w-4 h-4 text-emerald-400" />
+              <span className="text-sm text-zinc-400">Trusted by 847+ local businesses</span>
             </div>
 
             {/* Main Headline */}
@@ -181,15 +230,15 @@ const LandingPage = () => {
               data-testid="trust-indicators"
             >
               <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-yellow-500" />
+                <Clock className="w-4 h-4 text-cyan-400" />
                 <span>Delivered in 24-48 hours</span>
               </div>
               <div className="flex items-center gap-2">
-                <MessageSquare className="w-4 h-4 text-yellow-500" />
+                <MessageSquare className="w-4 h-4 text-emerald-400" />
                 <span>No calls required</span>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-yellow-500" />
+                <Check className="w-4 h-4 text-emerald-400" />
                 <span>Actionable fixes included</span>
               </div>
             </div>
@@ -208,7 +257,28 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Social Proof Section */}
+      {/* Stats Section */}
+      <section 
+        id="stats" 
+        ref={(el) => (sectionRefs.current.stats = el)}
+        className="py-16 md:py-20 bg-[#050505] border-y border-white/5"
+        data-testid="stats-section"
+      >
+        <div className="container-custom px-6">
+          <div className={`grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 max-w-5xl mx-auto ${isVisible.hero ? 'animate-fade-up' : 'opacity-0'}`} style={{ animationDelay: '0.6s', animationFillMode: 'both' }}>
+            {stats.map((stat, index) => (
+              <div key={index} className="text-center" data-testid={`stat-${index}`}>
+                <div className={`text-4xl md:text-5xl font-extrabold mb-2 ${stat.color}`} style={{ fontFamily: 'Outfit, sans-serif' }}>
+                  {stat.value}
+                </div>
+                <div className="text-sm text-zinc-500">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Social Proof / Testimonials Section */}
       <section 
         id="socialProof" 
         ref={(el) => (sectionRefs.current.socialProof = el)}
@@ -217,38 +287,56 @@ const LandingPage = () => {
       >
         <div className="container-custom">
           <div className={`text-center mb-16 ${isVisible.socialProof ? 'animate-fade-up' : 'opacity-0'}`} style={{ animationFillMode: 'both' }}>
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4" data-testid="social-proof-title">
-              Trusted by Businesses Improving Their AI Visibility
+            <span className="text-emerald-400 text-sm font-semibold uppercase tracking-widest">Real Results</span>
+            <h2 className="text-3xl sm:text-4xl font-bold mt-4 mb-4" data-testid="social-proof-title">
+              What Business Owners Are Saying
             </h2>
-            <p className="text-zinc-500 flex items-center justify-center gap-2">
-              <TrendingUp className="w-5 h-5 text-green-500" />
-              <span>127+ businesses analyzed in the last 30 days</span>
+            <p className="text-zinc-500 max-w-xl mx-auto">
+              Don't take our word for it. Here's what happened after they implemented our AI visibility fixes.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {testimonials.map((testimonial, index) => (
               <div 
                 key={index}
                 className={`testimonial-card hover-lift ${isVisible.socialProof ? 'animate-fade-up' : 'opacity-0'}`}
-                style={{ animationDelay: `${(index + 1) * 0.1}s`, animationFillMode: 'both' }}
+                style={{ animationDelay: `${(index + 1) * 0.08}s`, animationFillMode: 'both' }}
                 data-testid={`testimonial-${index}`}
               >
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
-                  ))}
+                {/* Header with stars and revenue */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-0.5">
+                    {[...Array(5)].map((_, i) => (
+                      <Star 
+                        key={i} 
+                        className={`w-4 h-4 ${i < testimonial.stars ? 'fill-amber-400 text-amber-400' : 'fill-zinc-700 text-zinc-700'}`} 
+                      />
+                    ))}
+                  </div>
+                  <span className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-emerald-400 text-sm font-semibold">
+                    {testimonial.revenue}
+                  </span>
                 </div>
-                <p className="text-lg mb-6 leading-relaxed">"{testimonial.quote}"</p>
-                <div className="flex items-center gap-4">
+
+                {/* Before quote */}
+                <p className="text-rose-400/80 text-sm italic mb-4">
+                  Before: "{testimonial.before}"
+                </p>
+
+                {/* Main testimonial */}
+                <p className="text-white/90 leading-relaxed mb-6">"{testimonial.quote}"</p>
+
+                {/* Author */}
+                <div className="flex items-center gap-4 pt-4 border-t border-white/10">
                   <img 
                     src={testimonial.image} 
                     alt={testimonial.name}
-                    className="w-12 h-12 rounded-full object-cover"
+                    className="w-10 h-10 rounded-full object-cover"
                   />
                   <div>
-                    <p className="font-semibold">{testimonial.name}</p>
-                    <p className="text-sm text-zinc-500">{testimonial.role}</p>
+                    <p className="font-semibold text-sm">{testimonial.name}</p>
+                    <p className="text-xs text-zinc-500">{testimonial.role}</p>
                   </div>
                 </div>
               </div>
@@ -267,7 +355,7 @@ const LandingPage = () => {
         <div className="container-custom">
           <div className="max-w-3xl mx-auto">
             <div className={`text-center mb-12 ${isVisible.problem ? 'animate-fade-up' : 'opacity-0'}`} style={{ animationFillMode: 'both' }}>
-              <span className="text-yellow-500 text-sm font-semibold uppercase tracking-widest">The Hidden Problem</span>
+              <span className="text-rose-400 text-sm font-semibold uppercase tracking-widest">The Hidden Problem</span>
               <h2 className="text-3xl sm:text-4xl font-bold mt-4 mb-6" data-testid="problem-title">
                 Why You're Invisible in AI Search
               </h2>
@@ -327,7 +415,7 @@ const LandingPage = () => {
         <div className="container-custom">
           <div className="max-w-3xl mx-auto text-center">
             <div className={`mb-12 ${isVisible.solution ? 'animate-fade-up' : 'opacity-0'}`} style={{ animationFillMode: 'both' }}>
-              <span className="text-yellow-500 text-sm font-semibold uppercase tracking-widest">The Solution</span>
+              <span className="text-cyan-400 text-sm font-semibold uppercase tracking-widest">The Solution</span>
               <h2 className="text-3xl sm:text-4xl font-bold mt-4 mb-6" data-testid="solution-title">
                 What This Report Does
               </h2>
@@ -380,7 +468,7 @@ const LandingPage = () => {
         <div className="container-custom">
           <div className="max-w-3xl mx-auto">
             <div className={`text-center mb-16 ${isVisible.howItWorks ? 'animate-fade-up' : 'opacity-0'}`} style={{ animationFillMode: 'both' }}>
-              <span className="text-yellow-500 text-sm font-semibold uppercase tracking-widest">Simple Process</span>
+              <span className="text-violet-400 text-sm font-semibold uppercase tracking-widest">Simple Process</span>
               <h2 className="text-3xl sm:text-4xl font-bold mt-4" data-testid="how-it-works-title">
                 How It Works
               </h2>
@@ -432,13 +520,13 @@ const LandingPage = () => {
         <div className="container-custom">
           <div className="max-w-2xl mx-auto">
             <div className={`text-center mb-12 ${isVisible.pricing ? 'animate-fade-up' : 'opacity-0'}`} style={{ animationFillMode: 'both' }}>
-              <span className="text-yellow-500 text-sm font-semibold uppercase tracking-widest">Pricing</span>
+              <span className="text-emerald-400 text-sm font-semibold uppercase tracking-widest">Pricing</span>
               <h2 className="text-3xl sm:text-4xl font-bold mt-4" data-testid="pricing-title">
                 What You Get ($199)
               </h2>
             </div>
 
-            <div className={`pricing-card bento-card border-yellow-500/30 ${isVisible.pricing ? 'animate-scale-in' : 'opacity-0'}`} style={{ animationDelay: '0.2s', animationFillMode: 'both' }}>
+            <div className={`pricing-card bento-card border-emerald-500/30 ${isVisible.pricing ? 'animate-scale-in' : 'opacity-0'}`} style={{ animationDelay: '0.2s', animationFillMode: 'both' }}>
               <div className="space-y-4 mb-8">
                 {valueItems.map((item, index) => (
                   <div key={index} className="value-item" data-testid={`value-item-${index}`}>
@@ -456,7 +544,7 @@ const LandingPage = () => {
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold">Today's Price</span>
-                  <span className="text-4xl font-extrabold text-yellow-500">$199</span>
+                  <span className="text-4xl font-extrabold text-emerald-400">$199</span>
                 </div>
               </div>
 
@@ -480,7 +568,7 @@ const LandingPage = () => {
 
             {/* Urgency Banner */}
             <div className={`urgency-banner mt-8 text-center ${isVisible.pricing ? 'animate-fade-up' : 'opacity-0'}`} style={{ animationDelay: '0.4s', animationFillMode: 'both' }} data-testid="urgency-banner">
-              <p className="flex items-center justify-center gap-2 text-yellow-500 font-semibold">
+              <p className="flex items-center justify-center gap-2 text-amber-400 font-semibold">
                 <AlertTriangle className="w-5 h-5" />
                 Only 10 reports generated per day to maintain quality
               </p>
@@ -504,7 +592,7 @@ const LandingPage = () => {
               </div>
               <h3 className="text-2xl font-bold mb-3" data-testid="guarantee-title">100% Risk-Free</h3>
               <p className="text-zinc-400 leading-relaxed">
-                If you don't find at least 3 actionable insights in your report, we'll refund you completely. No questions asked. We're confident in the value because we've helped 127+ businesses already.
+                If you don't find at least 3 actionable insights in your report, we'll refund you completely. No questions asked. We're confident in the value because we've helped 847+ businesses already.
               </p>
             </div>
           </div>
@@ -521,7 +609,7 @@ const LandingPage = () => {
         <div className="container-custom">
           <div className="max-w-2xl mx-auto">
             <div className={`text-center mb-12 ${isVisible.faq ? 'animate-fade-up' : 'opacity-0'}`} style={{ animationFillMode: 'both' }}>
-              <span className="text-yellow-500 text-sm font-semibold uppercase tracking-widest">FAQ</span>
+              <span className="text-zinc-400 text-sm font-semibold uppercase tracking-widest">FAQ</span>
               <h2 className="text-3xl sm:text-4xl font-bold mt-4" data-testid="faq-title">
                 Common Questions
               </h2>

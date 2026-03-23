@@ -81,8 +81,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 30px rgba(234, 179, 8, 0.3); }
-  50% { box-shadow: 0 0 50px rgba(234, 179, 8, 0.5); }
+  0%, 100% { box-shadow: 0 0 30px rgba(16, 185, 129, 0.3); }
+  50% { box-shadow: 0 0 50px rgba(16, 185, 129, 0.5); }
 }
 
 @keyframes fade-up {
@@ -165,23 +165,23 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Glow effects */
 .glow-yellow {
-  box-shadow: 0 0 30px rgba(234, 179, 8, 0.3);
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
 }
 
 .glow-yellow-strong {
-  box-shadow: 0 0 40px rgba(234, 179, 8, 0.5);
+  box-shadow: 0 0 40px rgba(16, 185, 129, 0.5);
 }
 
 /* CTA Button styles */
 .cta-button {
-  background-color: var(--primary);
-  color: #000;
+  background-color: #10B981;
+  color: #fff;
   font-family: 'Outfit', sans-serif;
   font-weight: 700;
   padding: 1rem 2rem;
   border-radius: 9999px;
   transition: transform 0.2s ease, box-shadow 0.3s ease, background-color 0.2s ease;
-  box-shadow: 0 0 30px rgba(234, 179, 8, 0.3);
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
   cursor: pointer;
   border: none;
   font-size: 1.125rem;
@@ -192,9 +192,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .cta-button:hover {
-  background-color: var(--primary-hover);
+  background-color: #34D399;
   transform: translateY(-2px);
-  box-shadow: 0 0 50px rgba(234, 179, 8, 0.5);
+  box-shadow: 0 0 50px rgba(16, 185, 129, 0.5);
 }
 
 .cta-button:active {
@@ -245,7 +245,7 @@ h1, h2, h3, h4, h5, h6 {
 .step-badge {
   width: 48px;
   height: 48px;
-  background: linear-gradient(135deg, var(--primary) 0%, #CA8A04 100%);
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -253,7 +253,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Outfit', sans-serif;
   font-weight: 800;
   font-size: 1.25rem;
-  color: #000;
+  color: #fff;
   flex-shrink: 0;
 }
 
@@ -343,8 +343,8 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Urgency banner */
 .urgency-banner {
-  background: linear-gradient(90deg, rgba(234, 179, 8, 0.1) 0%, rgba(234, 179, 8, 0.05) 50%, rgba(234, 179, 8, 0.1) 100%);
-  border: 1px solid rgba(234, 179, 8, 0.3);
+  background: linear-gradient(90deg, rgba(251, 191, 36, 0.1) 0%, rgba(251, 191, 36, 0.05) 50%, rgba(251, 191, 36, 0.1) 100%);
+  border: 1px solid rgba(251, 191, 36, 0.3);
   border-radius: 0.75rem;
   padding: 1rem 1.5rem;
 }
@@ -353,7 +353,7 @@ h1, h2, h3, h4, h5, h6 {
 .check-icon {
   width: 24px;
   height: 24px;
-  background: var(--accent-green);
+  background: #10B981;
   border-radius: 50%;
   display: flex;
   align-items: center;
