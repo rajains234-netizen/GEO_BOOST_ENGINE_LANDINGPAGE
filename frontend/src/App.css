@@ -1,34 +1,228 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* App-specific styles - extends index.css */
+
+/* Hero specific */
+.hero-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+.hero-content {
+  position: relative;
+  z-index: 10;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+/* Background abstract shapes */
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+}
+
+.bg-shape-1 {
+  width: 500px;
+  height: 500px;
+  background: rgba(234, 179, 8, 0.08);
+  top: -100px;
+  right: -100px;
+}
+
+.bg-shape-2 {
+  width: 400px;
+  height: 400px;
+  background: rgba(59, 130, 246, 0.05);
+  bottom: -50px;
+  left: -100px;
+}
+
+/* Pricing card highlight */
+.pricing-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.pricing-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Stats grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 2rem;
+}
+
+/* How it works connector line */
+.steps-connector {
+  position: absolute;
+  left: 24px;
+  top: 60px;
+  bottom: 60px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--primary) 0%, transparent 100%);
+}
+
+/* Feature list */
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+/* Comparison strike-through */
+.original-price {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+/* Responsive video/image container */
+.media-container {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--border-default);
+}
+
+/* Floating elements */
+.floating-badge {
+  position: absolute;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Scroll indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: float 2s ease-in-out infinite;
+}
+
+/* Section divider */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--border-default) 50%, transparent 100%);
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+/* Logo text */
+.logo-text {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+/* AI platform badge */
+.platform-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+/* Checkmark animation */
+@keyframes check-appear {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.check-animated {
+  animation: check-appear 0.3s ease-out forwards;
+}
+
+/* Hover card effect */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Text gradient animation */
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animated-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease infinite;
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .hero-section {
+    min-height: auto;
+    padding-top: 6rem;
+    padding-bottom: 4rem;
+  }
+  
+  .cta-button {
+    width: 100%;
     justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
 }
 
-.App-link {
-    color: #61dafb;
+/* Desktop enhancements */
+@media (min-width: 1024px) {
+  .hero-section {
+    padding-top: 8rem;
+  }
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+/* Focus states for accessibility */
+.cta-button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Selection styling */
+::selection {
+  background: rgba(234, 179, 8, 0.3);
+  color: var(--text-primary);
 }
