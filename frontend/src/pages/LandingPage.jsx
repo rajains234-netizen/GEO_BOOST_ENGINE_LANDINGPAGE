@@ -3,6 +3,8 @@ import {
   ArrowRight, 
   Check, 
   ChevronDown, 
+  ChevronLeft,
+  ChevronRight,
   Zap, 
   Search, 
   FileText, 
@@ -15,13 +17,21 @@ import {
   Users,
   Target,
   AlertTriangle,
-  Star
+  Star,
+  Phone,
+  DollarSign
 } from "lucide-react";
+import BusinessForm from "../components/BusinessForm";
+import { trackCTAClick, trackFormOpen, trackScrollDepth } from "../components/AnalyticsTracker";
 
 const LandingPage = () => {
   const [openFaq, setOpenFaq] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
+  const [hoveredTestimonial, setHoveredTestimonial] = useState(null);
   const [isVisible, setIsVisible] = useState({
     hero: true,
+    stats: false,
     socialProof: false,
     problem: false,
     solution: false,
@@ -32,6 +42,7 @@ const LandingPage = () => {
     finalCta: false
   });
   const sectionRefs = useRef({});
+  const testimonialCarouselRef = useRef(null);
 
   useEffect(() => {
     // Set hero visible immediately
@@ -52,8 +63,28 @@ const LandingPage = () => {
       if (ref) observer.observe(ref);
     });
 
-    return () => observer.disconnect();
+    // Track scroll depth
+    let maxScroll = 0;
+    const handleScroll = () => {
+      const scrollPercent = Math.round((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
+      if (scrollPercent > maxScroll && scrollPercent % 25 === 0) {
+        maxScroll = scrollPercent;
+        trackScrollDepth(scrollPercent);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
+
+  const handleCTAClick = (location) => {
+    trackCTAClick(location);
+    trackFormOpen();
+    setShowForm(true);
+  };
 
   const scrollToCTA = () => {
     const element = document.getElementById("pricing");
@@ -91,7 +122,8 @@ const LandingPage = () => {
       quote: "Within 3 weeks of implementing the GEO Boost plan, my phone EXPLODED. ChatGPT now recommends us FIRST when people ask for HVAC help in Phoenix. I've had to hire two more technicians.",
       name: "Mike Fernandez",
       role: "Owner, Fernandez HVAC",
-      image: "https://images.pexels.com/photos/6077664/pexels-photo-6077664.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=100&w=100"
+      image: "https://images.pexels.com/photos/6077664/pexels-photo-6077664.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=100&w=100",
+      stats: { newLeads: "47/month", aiPlatforms: 4, timeToResults: "3 weeks" }
     },
     {
       revenue: "+$31,000/month",
@@ -100,7 +132,8 @@ const LandingPage = () => {
       quote: "I was SKEPTICAL — another marketing report? But this was different. Specific. Actionable. My team implemented everything in ONE WEEKEND. Now we're the #1 AI recommendation for med spas in LA.",
       name: "Dr. Sarah Chen",
       role: "Owner, Glow Med Spa",
-      image: "https://images.pexels.com/photos/36499769/pexels-photo-36499769.png?auto=compress&cs=tinysrgb&dpr=2&h=100&w=100"
+      image: "https://images.pexels.com/photos/36499769/pexels-photo-36499769.png?auto=compress&cs=tinysrgb&dpr=2&h=100&w=100",
+      stats: { newLeads: "89/month", aiPlatforms: 4, timeToResults: "1 week" }
     },
     {
       revenue: "+$8,200/month",
@@ -109,7 +142,8 @@ const LandingPage = () => {
       quote: "Best $199 I ever spent. The report showed me exactly why my competitor was getting recommended instead of me. Fixed it in 2 days. Now I beat him on every AI platform. Top recommendation in my area.",
       name: "Tom Bradley",
       role: "Owner, Bradley Plumbing",
-      image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=100&w=100"
+      image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=100&w=100",
+      stats: { newLeads: "31/month", aiPlatforms: 3, timeToResults: "2 days" }
     },
     {
       revenue: "+$22,500/month",
@@ -118,7 +152,8 @@ const LandingPage = () => {
       quote: "Our law firm was completely invisible to AI assistants. Within 6 weeks of following the report, we're now consistently recommended for personal injury cases in Houston. 14 new clients last month alone.",
       name: "Jennifer Martinez",
       role: "Partner, Martinez Law Group",
-      image: "https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=100&w=100"
+      image: "https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=100&w=100",
+      stats: { newLeads: "14/month", aiPlatforms: 4, timeToResults: "6 weeks" }
     },
     {
       revenue: "+$6,800/month",
@@ -127,7 +162,8 @@ const LandingPage = () => {
       quote: "I've been practicing 20 years but was losing patients to newer clinics. The report revealed 12 critical gaps in my AI visibility. Fixed them all. Now Google AI and ChatGPT recommend my practice first.",
       name: "Dr. Robert Kim",
       role: "DDS, Kim Family Dental",
-      image: "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=100&w=100"
+      image: "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=100&w=100",
+      stats: { newLeads: "22/month", aiPlatforms: 2, timeToResults: "4 weeks" }
     },
     {
       revenue: "+$18,700/month",
@@ -136,7 +172,8 @@ const LandingPage = () => {
       quote: "This completely changed how I think about online visibility. The AI landscape is DIFFERENT from SEO. The specificity of the fixes was incredible. 23 new roofing contracts in 2 months.",
       name: "David Thompson",
       role: "Owner, Thompson Roofing Co.",
-      image: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=100&w=100"
+      image: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=100&w=100",
+      stats: { newLeads: "23/month", aiPlatforms: 4, timeToResults: "8 weeks" }
     }
   ];
 
@@ -163,7 +200,7 @@ const LandingPage = () => {
             GEO<span className="text-emerald-400">Boost</span>
           </div>
           <button 
-            onClick={scrollToCTA}
+            onClick={() => handleCTAClick('header')}
             className="cta-button text-sm py-2 px-6"
             data-testid="header-cta"
           >
@@ -215,7 +252,7 @@ const LandingPage = () => {
             {/* CTA Button */}
             <div className={`mb-8 ${isVisible.hero ? 'animate-fade-up delay-300' : 'opacity-0'}`}>
               <button 
-                onClick={scrollToCTA}
+                onClick={() => handleCTAClick('hero')}
                 className="cta-button text-lg px-10 py-5 animate-pulse-glow"
                 data-testid="hero-cta"
               >
@@ -296,51 +333,169 @@ const LandingPage = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {/* Desktop Grid View */}
+          <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {testimonials.map((testimonial, index) => (
               <div 
                 key={index}
-                className={`testimonial-card hover-lift ${isVisible.socialProof ? 'animate-fade-up' : 'opacity-0'}`}
+                className={`testimonial-card group relative overflow-hidden ${isVisible.socialProof ? 'animate-fade-up' : 'opacity-0'}`}
                 style={{ animationDelay: `${(index + 1) * 0.08}s`, animationFillMode: 'both' }}
                 data-testid={`testimonial-${index}`}
+                onMouseEnter={() => setHoveredTestimonial(index)}
+                onMouseLeave={() => setHoveredTestimonial(null)}
               >
-                {/* Header with stars and revenue */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-0.5">
-                    {[...Array(5)].map((_, i) => (
-                      <Star 
-                        key={i} 
-                        className={`w-4 h-4 ${i < testimonial.stars ? 'fill-amber-400 text-amber-400' : 'fill-zinc-700 text-zinc-700'}`} 
-                      />
-                    ))}
+                {/* Default Content */}
+                <div className={`transition-all duration-300 ${hoveredTestimonial === index ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+                  {/* Header with stars and revenue */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-0.5">
+                      {[...Array(5)].map((_, i) => (
+                        <Star 
+                          key={i} 
+                          className={`w-4 h-4 ${i < testimonial.stars ? 'fill-amber-400 text-amber-400' : 'fill-zinc-700 text-zinc-700'}`} 
+                        />
+                      ))}
+                    </div>
+                    <span className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-emerald-400 text-sm font-semibold">
+                      {testimonial.revenue}
+                    </span>
                   </div>
-                  <span className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-emerald-400 text-sm font-semibold">
-                    {testimonial.revenue}
-                  </span>
+
+                  {/* Before quote */}
+                  <p className="text-rose-400/80 text-sm italic mb-4">
+                    Before: "{testimonial.before}"
+                  </p>
+
+                  {/* Main testimonial */}
+                  <p className="text-white/90 leading-relaxed mb-6 line-clamp-4">"{testimonial.quote}"</p>
+
+                  {/* Author */}
+                  <div className="flex items-center gap-4 pt-4 border-t border-white/10">
+                    <img 
+                      src={testimonial.image} 
+                      alt={testimonial.name}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                    <div>
+                      <p className="font-semibold text-sm">{testimonial.name}</p>
+                      <p className="text-xs text-zinc-500">{testimonial.role}</p>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Before quote */}
-                <p className="text-rose-400/80 text-sm italic mb-4">
-                  Before: "{testimonial.before}"
-                </p>
-
-                {/* Main testimonial */}
-                <p className="text-white/90 leading-relaxed mb-6">"{testimonial.quote}"</p>
-
-                {/* Author */}
-                <div className="flex items-center gap-4 pt-4 border-t border-white/10">
-                  <img 
-                    src={testimonial.image} 
-                    alt={testimonial.name}
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
-                  <div>
-                    <p className="font-semibold text-sm">{testimonial.name}</p>
-                    <p className="text-xs text-zinc-500">{testimonial.role}</p>
+                {/* Hover Stats Overlay */}
+                <div className={`absolute inset-0 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 p-6 flex flex-col justify-center transition-all duration-300 ${hoveredTestimonial === index ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
+                  <div className="text-center mb-6">
+                    <img 
+                      src={testimonial.image} 
+                      alt={testimonial.name}
+                      className="w-16 h-16 rounded-full object-cover mx-auto mb-3 border-2 border-emerald-500"
+                    />
+                    <p className="font-bold text-white">{testimonial.name}</p>
+                    <p className="text-emerald-400 text-2xl font-extrabold mt-1">{testimonial.revenue}</p>
+                  </div>
+                  
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div className="bg-black/30 rounded-lg p-3">
+                      <div className="text-xl font-bold text-cyan-400">{testimonial.stats.newLeads}</div>
+                      <div className="text-xs text-zinc-400">New Leads</div>
+                    </div>
+                    <div className="bg-black/30 rounded-lg p-3">
+                      <div className="text-xl font-bold text-amber-400">{testimonial.stats.aiPlatforms}</div>
+                      <div className="text-xs text-zinc-400">AI Platforms</div>
+                    </div>
+                    <div className="bg-black/30 rounded-lg p-3">
+                      <div className="text-xl font-bold text-emerald-400">{testimonial.stats.timeToResults}</div>
+                      <div className="text-xs text-zinc-400">Time to Results</div>
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Mobile Horizontal Carousel */}
+          <div className="md:hidden">
+            <div 
+              ref={testimonialCarouselRef}
+              className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 px-4 -mx-4 scrollbar-hide"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {testimonials.map((testimonial, index) => (
+                <div 
+                  key={index}
+                  className={`testimonial-card flex-shrink-0 w-[85vw] max-w-sm snap-center ${isVisible.socialProof ? 'animate-fade-up' : 'opacity-0'}`}
+                  style={{ animationDelay: `${(index + 1) * 0.08}s`, animationFillMode: 'both' }}
+                  data-testid={`testimonial-mobile-${index}`}
+                >
+                  {/* Header with stars and revenue */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-0.5">
+                      {[...Array(5)].map((_, i) => (
+                        <Star 
+                          key={i} 
+                          className={`w-4 h-4 ${i < testimonial.stars ? 'fill-amber-400 text-amber-400' : 'fill-zinc-700 text-zinc-700'}`} 
+                        />
+                      ))}
+                    </div>
+                    <span className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-emerald-400 text-sm font-semibold">
+                      {testimonial.revenue}
+                    </span>
+                  </div>
+
+                  {/* Before quote */}
+                  <p className="text-rose-400/80 text-sm italic mb-4">
+                    Before: "{testimonial.before}"
+                  </p>
+
+                  {/* Main testimonial */}
+                  <p className="text-white/90 leading-relaxed mb-4 text-sm">"{testimonial.quote}"</p>
+
+                  {/* Stats Row */}
+                  <div className="grid grid-cols-3 gap-2 text-center mb-4 py-3 border-y border-white/10">
+                    <div>
+                      <div className="text-sm font-bold text-cyan-400">{testimonial.stats.newLeads}</div>
+                      <div className="text-xs text-zinc-500">Leads</div>
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold text-amber-400">{testimonial.stats.aiPlatforms}</div>
+                      <div className="text-xs text-zinc-500">Platforms</div>
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold text-emerald-400">{testimonial.stats.timeToResults}</div>
+                      <div className="text-xs text-zinc-500">Results</div>
+                    </div>
+                  </div>
+
+                  {/* Author */}
+                  <div className="flex items-center gap-3">
+                    <img 
+                      src={testimonial.image} 
+                      alt={testimonial.name}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                    <div>
+                      <p className="font-semibold text-sm">{testimonial.name}</p>
+                      <p className="text-xs text-zinc-500">{testimonial.role}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Carousel Dots */}
+            <div className="flex justify-center gap-2 mt-4">
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  className={`w-2 h-2 rounded-full transition-all ${currentTestimonialIndex === index ? 'bg-emerald-500 w-6' : 'bg-zinc-700'}`}
+                  onClick={() => {
+                    setCurrentTestimonialIndex(index);
+                    testimonialCarouselRef.current?.children[index]?.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+                  }}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -549,6 +704,7 @@ const LandingPage = () => {
               </div>
 
               <button 
+                onClick={() => handleCTAClick('pricing')}
                 className="cta-button w-full text-lg py-5 animate-pulse-glow"
                 data-testid="pricing-cta"
               >
@@ -655,6 +811,7 @@ const LandingPage = () => {
                 Every day you wait, your competitors get stronger in AI search. Get the insights you need to take back your visibility.
               </p>
               <button 
+                onClick={() => handleCTAClick('final')}
                 className="cta-button text-lg px-10 py-5 animate-pulse-glow"
                 data-testid="final-cta-button"
               >
@@ -684,13 +841,21 @@ const LandingPage = () => {
       {/* Mobile Sticky CTA */}
       <div className="mobile-sticky-cta md:hidden" data-testid="mobile-sticky-cta">
         <button 
-          onClick={scrollToCTA}
+          onClick={() => handleCTAClick('mobile-sticky')}
           className="cta-button w-full py-4"
         >
           Get My Report – $199
           <ArrowRight className="w-5 h-5" />
         </button>
       </div>
+
+      {/* Business Form Modal */}
+      {showForm && (
+        <BusinessForm 
+          onSuccess={() => setShowForm(false)}
+          onCancel={() => setShowForm(false)}
+        />
+      )}
     </div>
   );
 };

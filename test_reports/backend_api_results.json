@@ -1,0 +1,111 @@
+{
+  "test_run_timestamp": "2026-03-23T19:16:08.254616",
+  "base_url": "https://geo-boost-engine.preview.emergentagent.com",
+  "total_tests": 6,
+  "passed_tests": 6,
+  "success_rate": 100.0,
+  "test_results": [
+    {
+      "test_name": "API Root Version Info",
+      "method": "GET",
+      "endpoint": "api/",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_time": 0.203769,
+      "timestamp": "2026-03-23T19:16:07.559812",
+      "response_data": {
+        "message": "GEO Boost Engine API",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "test_name": "Create Business Lead",
+      "method": "POST",
+      "endpoint": "api/leads",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_time": 0.143121,
+      "timestamp": "2026-03-23T19:16:07.705168",
+      "response_data": {
+        "id": "9f80a338-ecb4-4533-ab20-3b52713eb960",
+        "business_name": "Test Business 191607",
+        "website": "https://testbusiness.com",
+        "location": "Phoenix, AZ",
+        "owner_name": "John Test",
+        "email": "john@testbusiness.com",
+        "phone": "(555) 123-4567",
+        "business_type": "HVAC & Heating",
+        "payment_status": "pending",
+        "payment_session_id": null,
+        "created_at": "2026-03-23T19:16:07.655921Z"
+      }
+    },
+    {
+      "test_name": "Get Lead by ID",
+      "method": "GET",
+      "endpoint": "api/leads/9f80a338-ecb4-4533-ab20-3b52713eb960",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_time": 0.150116,
+      "timestamp": "2026-03-23T19:16:07.856709",
+      "response_data": {
+        "id": "9f80a338-ecb4-4533-ab20-3b52713eb960",
+        "business_name": "Test Business 191607",
+        "website": "https://testbusiness.com",
+        "location": "Phoenix, AZ",
+        "owner_name": "John Test",
+        "email": "john@testbusiness.com",
+        "phone": "(555) 123-4567",
+        "business_type": "HVAC & Heating",
+        "payment_status": "pending",
+        "payment_session_id": null,
+        "created_at": "2026-03-23T19:16:07.655921Z"
+      }
+    },
+    {
+      "test_name": "Create Payment Session",
+      "method": "POST",
+      "endpoint": "api/payments/create-session",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_time": 0.117879,
+      "timestamp": "2026-03-23T19:16:07.976055",
+      "response_data": {
+        "checkout_url": "https://geo-boost-engine.preview.emergentagent.com/success?session_id=b3f4173f-6b3c-48e5-b113-510969ca4129&lead_id=9f80a338-ecb4-4533-ab20-3b52713eb960&demo=true",
+        "session_id": "b3f4173f-6b3c-48e5-b113-510969ca4129"
+      }
+    },
+    {
+      "test_name": "Confirm Payment",
+      "method": "POST",
+      "endpoint": "api/payments/confirm?lead_id=9f80a338-ecb4-4533-ab20-3b52713eb960&session_id=b3f4173f-6b3c-48e5-b113-510969ca4129",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_time": 0.124425,
+      "timestamp": "2026-03-23T19:16:08.103230",
+      "response_data": {
+        "status": "success",
+        "message": "Payment confirmed. Report delivery email sent.",
+        "lead_id": "9f80a338-ecb4-4533-ab20-3b52713eb960"
+      }
+    },
+    {
+      "test_name": "Track Analytics Event",
+      "method": "POST",
+      "endpoint": "api/track",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_time": 0.149345,
+      "timestamp": "2026-03-23T19:16:08.253906",
+      "response_data": {
+        "status": "tracked"
+      }
+    }
+  ]
+}
