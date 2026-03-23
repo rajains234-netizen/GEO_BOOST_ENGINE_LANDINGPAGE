@@ -155,3 +155,18 @@ h1, h2, h3, h4, h5, h6 {
     @apply bg-background text-foreground;
   }
 }
+
+/* ============================= */
+/* REMOVE EMERGENT BADGE */
+/* ============================= */
+
+[class*="emergent"],
+[id*="emergent"],
+a[href*="emergent"],
+iframe[src*="emergent"] {
+  display: none !important;
+}
+
+div[style*="position: fixed"] {
+  display: none !important;
+}
