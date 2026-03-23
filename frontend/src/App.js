@@ -940,14 +940,19 @@ const StickyCTA = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setVisible(window.scrollY > 800);
+      // Only show sticky CTA after scrolling past hero section
+      setVisible(window.scrollY > 600);
     };
+    // Check initial state
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  if (!visible) return null;
+
   return (
-    <div className={`sticky-cta ${visible ? 'visible' : ''}`} data-testid="sticky-cta">
+    <div className="sticky-cta visible" data-testid="sticky-cta">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="text-center sm:text-left">
           <div className="text-white font-bold" style={{ fontFamily: 'Outfit' }}>
