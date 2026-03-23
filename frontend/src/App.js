@@ -1219,10 +1219,10 @@ function App() {
 
   useEffect(() => {
     const removeBadge = () => {
-      document.querySelectorAll('*').forEach(el => {
+      document.querySelectorAll('div, a, iframe').forEach(el => {
         if (
           el.innerText &&
-          el.innerText.toLowerCase().includes('emergent')
+          el.innerText.toLowerCase().includes('made with emergent')
         ) {
           el.remove();
         }
@@ -1230,7 +1230,7 @@ function App() {
     };
 
     removeBadge();
-    const interval = setInterval(removeBadge, 500);
+    const interval = setInterval(removeBadge, 1000);
 
     return () => clearInterval(interval);
   }, []);
