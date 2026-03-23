@@ -21,12 +21,37 @@ import {
   FileText,
   Target,
   BarChart3,
-  AlertTriangle
+  AlertTriangle,
+  XCircle,
+  DollarSign,
+  PhoneOff,
+  TrendingDown,
+  Eye,
+  Timer
 } from "lucide-react";
 import "@/App.css";
 
 // PayPal payment link placeholder - replace with actual link
 const PAYPAL_LINK = "#payment";
+
+// Countdown timer hook
+const useCountdown = () => {
+  const [timeLeft, setTimeLeft] = useState({ hours: 2, minutes: 47, seconds: 33 });
+  
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
+        if (prev.minutes > 0) return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
+        if (prev.hours > 0) return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
+        return prev;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+  
+  return timeLeft;
+};
 
 // Animation variants
 const fadeInUp = {
@@ -72,8 +97,10 @@ const Header = () => {
   );
 };
 
-// Hero Section
+// Hero Section - AIDA Framework: Attention + Interest
 const HeroSection = () => {
+  const timeLeft = useCountdown();
+  
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden" data-testid="hero-section">
       {/* Background elements */}
@@ -89,70 +116,129 @@ const HeroSection = () => {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         <div className="max-w-4xl">
-          {/* Badge */}
+          {/* URGENCY Badge - Countdown Timer */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8"
+            className="inline-flex items-center gap-3 px-5 py-3 rounded-full bg-red-500/10 border border-red-500/30 mb-6"
           >
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-            <span className="text-sm text-zinc-400">Limited: 50 reports per week</span>
+            <span className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+              <span className="text-sm font-bold text-red-400">PRICE GOING UP IN:</span>
+            </span>
+            <span className="font-mono text-white font-bold">
+              {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
+            </span>
           </motion.div>
 
-          {/* Main headline */}
+          {/* ATTENTION: Aggressive Headline - Interrupts and Shocks */}
           <motion.h1 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tighter leading-[0.95] text-white mb-6"
+            className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tighter leading-[0.95] text-white mb-4"
             style={{ fontFamily: 'Outfit' }}
           >
-            AI Won't Recommend You{" "}
-            <span className="gradient-text">Unless You Tell It How</span>
+            Your Business Is{" "}
+            <span className="text-red-500">INVISIBLE</span> to AI
           </motion.h1>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-6"
+            style={{ fontFamily: 'Outfit' }}
+          >
+            And It's <span className="gradient-text">Costing You Thousands</span> Every Month
+          </motion.p>
 
-          {/* Subheadline */}
-          <motion.p 
+          {/* INTEREST: Agitate the Problem - Specific Pain */}
+          <motion.div 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg sm:text-xl text-zinc-400 max-w-2xl mb-10 leading-relaxed"
+            className="bg-zinc-900/60 border border-white/10 rounded-xl p-5 mb-8 max-w-2xl"
           >
-            ChatGPT, Google AI, and Bing are replacing traditional search. If your local business isn't optimized for AI recommendations, you're losing customers to competitors who are. Get your personalized AI visibility audit today.
-          </motion.p>
+            <p className="text-lg text-zinc-300 leading-relaxed">
+              <span className="text-white font-bold">Right now, someone is asking ChatGPT:</span> "Who's the best {'{'}your service{'}'} near me?"
+            </p>
+            <p className="text-xl text-red-400 font-bold mt-2">
+              Is AI recommending YOU... or sending that customer to your competitor?
+            </p>
+          </motion.div>
 
-          {/* CTA Buttons */}
+          {/* Social Proof Micro-stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.25 }}
+            className="flex flex-wrap gap-6 mb-8"
+          >
+            <div className="flex items-center gap-2">
+              <Users className="w-5 h-5 text-cyan-400" />
+              <span className="text-zinc-300"><span className="text-white font-bold">847</span> businesses audited</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-green-400" />
+              <span className="text-zinc-300"><span className="text-white font-bold">94%</span> saw more leads</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+              <span className="text-zinc-300"><span className="text-white font-bold">4.9/5</span> rating</span>
+            </div>
+          </motion.div>
+
+          {/* CTA Buttons - Bigger, Bolder, More Urgent */}
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 mb-12"
+            className="flex flex-col sm:flex-row gap-4 mb-6"
           >
             <a 
               href={PAYPAL_LINK}
               data-testid="hero-cta-button"
-              className="cta-button text-lg justify-center"
+              className="cta-button-hero text-xl justify-center py-5 px-10"
             >
-              Get My GEO Boost Report – $99 <Zap className="w-5 h-5" />
-            </a>
-            <a 
-              href="#how-it-works"
-              data-testid="hero-secondary-button"
-              className="secondary-button text-center"
-            >
-              See How It Works
+              <span className="flex flex-col items-center sm:flex-row sm:gap-3">
+                <span>YES! Show Me Why I'm Invisible</span>
+                <span className="text-sm opacity-80">Just $99 (was $299)</span>
+              </span>
+              <Zap className="w-6 h-6 ml-2 animate-pulse" />
             </a>
           </motion.div>
+          
+          {/* Risk Reversal */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.35 }}
+            className="flex flex-wrap items-center gap-4 mb-8"
+          >
+            <div className="flex items-center gap-2 text-sm text-zinc-400">
+              <ShieldCheck className="w-4 h-4 text-green-400" />
+              <span>30-Day Money-Back Guarantee</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-zinc-400">
+              <Clock className="w-4 h-4 text-cyan-400" />
+              <span>Report Delivered in 24-48 Hours</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-zinc-400">
+              <Eye className="w-4 h-4 text-purple-400" />
+              <span>Only 7 Spots Left Today</span>
+            </div>
+          </motion.div>
 
-          {/* Trust badges */}
+          {/* Platform badges */}
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             className="flex flex-wrap items-center gap-4"
           >
-            <span className="text-sm text-zinc-500">Covers all major AI platforms:</span>
+            <span className="text-sm text-zinc-500">We analyze your visibility on:</span>
             <div className="flex flex-wrap gap-3">
               {[
                 { icon: MessageSquare, name: "ChatGPT" },
@@ -173,25 +259,28 @@ const HeroSection = () => {
   );
 };
 
-// Problem Agitation Section
+// Problem Agitation Section - PAS Framework: Problem, Agitate, Solution
 const ProblemSection = () => {
   const problems = [
     {
-      icon: AlertTriangle,
-      title: "Traditional SEO Is Dying",
-      description: "Google's AI Overviews now answer 60% of queries without clicks. Your website traffic is evaporating, and traditional SEO won't save you.",
+      icon: PhoneOff,
+      title: "Your Phone Stopped Ringing",
+      description: "Remember when leads came in consistently? Now your competitors are getting those calls. Not because they're better—but because AI recommends THEM, not you.",
+      stat: "73% of consumers now ask AI before calling",
       color: "from-red-500/20 to-orange-500/20"
     },
     {
-      icon: TrendingUp,
-      title: "AI Search Is the New Reality",
-      description: "Over 200 million people use ChatGPT monthly. When someone asks 'best plumber near me,' will AI recommend YOU or your competitor?",
+      icon: TrendingDown,
+      title: "You're Bleeding Money Daily",
+      description: "Every day you're invisible to AI, you're losing $200-$500 in potential revenue. That's $6,000-$15,000 per month walking straight to your competition.",
+      stat: "Average loss: $8,400/month",
       color: "from-orange-500/20 to-yellow-500/20"
     },
     {
-      icon: Target,
-      title: "Your Competitors Are Already There",
-      description: "Smart local businesses are optimizing for AI NOW. Every day you wait, they're capturing the customers that should be yours.",
+      icon: XCircle,
+      title: "Traditional Marketing Is Dead",
+      description: "SEO, Google Ads, Yelp—they're all dying. AI is the new gatekeeper. If you're not optimized for AI, you might as well not exist.",
+      stat: "AI search up 400% in 12 months",
       color: "from-yellow-500/20 to-red-500/20"
     }
   ];
@@ -209,15 +298,15 @@ const ProblemSection = () => {
           viewport={{ once: true, margin: "-100px" }}
           className="text-center mb-16"
         >
-          <span className="uppercase text-xs tracking-[0.2em] font-bold text-cyan-400 mb-4 block">
-            The Visibility Crisis
+          <span className="uppercase text-xs tracking-[0.2em] font-bold text-red-400 mb-4 block">
+            WARNING: This Is Happening Right Now
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tighter text-white mb-6" style={{ fontFamily: 'Outfit' }}>
-            If AI Can't Find You,{" "}
-            <span className="gradient-text">Neither Can Your Customers</span>
+            While You Read This, Your Competitors Are{" "}
+            <span className="text-red-500">Stealing Your Customers</span>
           </h2>
-          <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-            The search landscape has fundamentally changed. Here's why your current strategy is failing:
+          <p className="text-xl text-zinc-300 max-w-3xl mx-auto">
+            This isn't fear-mongering. This is the brutal reality of 2025. The businesses that adapt will thrive. The ones that don't will disappear.
           </p>
         </motion.div>
 
@@ -234,19 +323,42 @@ const ProblemSection = () => {
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${problem.color} opacity-50`} />
               <div className="relative">
-                <div className="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-6">
+                <div className="w-14 h-14 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center mb-6">
                   <problem.icon className="w-7 h-7 text-red-400" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-3" style={{ fontFamily: 'Outfit' }}>
                   {problem.title}
                 </h3>
-                <p className="text-zinc-400 leading-relaxed">
+                <p className="text-zinc-400 leading-relaxed mb-4">
                   {problem.description}
                 </p>
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20">
+                  <AlertTriangle className="w-3 h-3 text-red-400" />
+                  <span className="text-xs font-bold text-red-400">{problem.stat}</span>
+                </div>
               </div>
             </motion.div>
           ))}
         </div>
+        
+        {/* Emotional Bridge CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          className="text-center mt-16"
+        >
+          <p className="text-2xl text-white font-bold mb-6" style={{ fontFamily: 'Outfit' }}>
+            How much longer can you afford to ignore this?
+          </p>
+          <a 
+            href={PAYPAL_LINK}
+            data-testid="problem-section-cta"
+            className="cta-button text-lg inline-flex"
+          >
+            Fix My AI Visibility Now – $99 <ArrowRight className="w-5 h-5" />
+          </a>
+        </motion.div>
       </div>
     </section>
   );
@@ -508,31 +620,37 @@ const WhatYouGetSection = () => {
   );
 };
 
-// Social Proof Section
+// Social Proof Section - Stronger Emotional Testimonials
 const SocialProofSection = () => {
   const testimonials = [
     {
       name: "Mike Reynolds",
       business: "Reynolds HVAC Services",
       location: "Phoenix, AZ",
-      quote: "Within 3 weeks of implementing the GEO Boost recommendations, my phone started ringing more. ChatGPT now recommends us when people ask for HVAC help in Phoenix. Game changer.",
+      before: "I was getting maybe 3-4 calls a week. Competitors were eating my lunch.",
+      quote: "Within 3 weeks of implementing the GEO Boost plan, my phone EXPLODED. ChatGPT now recommends us FIRST when people ask for HVAC help in Phoenix. I've had to hire two more technicians.",
       result: "+47% more calls",
+      revenue: "+$12,400/month",
       avatar: "https://images.unsplash.com/photo-1758887261865-a2b89c0f7ac5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDB8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBidXNpbmVzcyUyMG93bmVyJTIwcG9ydHJhaXR8ZW58MHx8fHwxNzc0MjQ4MDQyfDA&ixlib=rb-4.1.0&q=85"
     },
     {
       name: "Dr. Sarah Chen",
       business: "Radiant Med Spa",
       location: "Los Angeles, CA",
-      quote: "I was skeptical about another marketing report. But this was different—specific, actionable, and my team implemented everything in a weekend. Now we show up in AI searches consistently.",
-      result: "+62% new patient inquiries",
+      before: "We spent $4,000/month on Google Ads with declining results.",
+      quote: "I was SKEPTICAL—another marketing report? But this was different. Specific. Actionable. My team implemented everything in ONE WEEKEND. Now we're the #1 AI recommendation for med spas in LA.",
+      result: "+62% new patients",
+      revenue: "+$31,000/month",
       avatar: "https://images.unsplash.com/photo-1769636930047-4478f12cf430?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDB8MHwxfHNlYXJjaHwyfHxwcm9mZXNzaW9uYWwlMjBidXNpbmVzcyUyMG93bmVyJTIwcG9ydHJhaXR8ZW58MHx8fHwxNzc0MjQ4MDQyfDA&ixlib=rb-4.1.0&q=85"
     },
     {
       name: "Tom Garcia",
       business: "Garcia Plumbing Co.",
       location: "Houston, TX",
-      quote: "Best $99 I ever spent on my business. The report showed me exactly why my competitor was getting all the AI referrals. Fixed it in 2 weeks. Now we're the top recommendation.",
-      result: "+38% revenue increase",
+      before: "My competitor was always showing up instead of me. I didn't know why.",
+      quote: "Best $99 I EVER spent. The report showed me EXACTLY why my competitor was getting all the AI referrals—and how to beat him. Fixed it in 2 weeks. Now I'M the top recommendation.",
+      result: "+38% revenue",
+      revenue: "+$8,700/month",
       avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face"
     }
   ];
@@ -550,14 +668,15 @@ const SocialProofSection = () => {
           viewport={{ once: true, margin: "-100px" }}
           className="text-center mb-16"
         >
-          <span className="uppercase text-xs tracking-[0.2em] font-bold text-cyan-400 mb-4 block">
-            Real Results
+          <span className="uppercase text-xs tracking-[0.2em] font-bold text-green-400 mb-4 block">
+            Real Business Owners. Real Results.
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tighter text-white mb-6" style={{ fontFamily: 'Outfit' }}>
-            Used by <span className="gradient-text">100+ Local Businesses</span>
+            They Were <span className="text-red-500">Invisible</span> Too.{" "}
+            <span className="gradient-text">Now They're Dominating.</span>
           </h2>
-          <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-            See what business owners like you are saying about GEO Boost Engine
+          <p className="text-xl text-zinc-300 max-w-3xl mx-auto">
+            847 local businesses have used GEO Boost Engine. Here's what happened when they finally became visible to AI:
           </p>
         </motion.div>
 
@@ -569,42 +688,86 @@ const SocialProofSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ delay: index * 0.1 }}
-              className="testimonial-card"
+              className="testimonial-card relative overflow-hidden"
               data-testid={`testimonial-card-${index}`}
             >
+              {/* Revenue badge */}
+              <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/30">
+                <span className="text-sm font-bold text-green-400">{testimonial.revenue}</span>
+              </div>
+              
               <div className="flex items-center gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-5 h-5 text-yellow-400 fill-yellow-400" />
                 ))}
               </div>
-              <p className="text-zinc-300 mb-6 italic leading-relaxed">
+              
+              {/* Before state */}
+              <p className="text-sm text-red-400/80 mb-3 italic">
+                Before: "{testimonial.before}"
+              </p>
+              
+              <p className="text-zinc-300 mb-6 leading-relaxed">
                 "{testimonial.quote}"
               </p>
               <div className="flex items-center gap-4">
                 <img 
                   src={testimonial.avatar} 
                   alt={testimonial.name}
-                  className="w-12 h-12 rounded-full object-cover"
+                  className="w-12 h-12 rounded-full object-cover border-2 border-cyan-400/30"
                 />
                 <div>
                   <div className="font-bold text-white" style={{ fontFamily: 'Outfit' }}>{testimonial.name}</div>
                   <div className="text-sm text-zinc-500">{testimonial.business}</div>
                 </div>
               </div>
-              <div className="mt-4 pt-4 border-t border-white/10">
-                <div className="text-cyan-400 font-bold">{testimonial.result}</div>
-                <div className="text-xs text-zinc-500">{testimonial.location}</div>
+              <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
+                <div>
+                  <div className="text-cyan-400 font-bold">{testimonial.result}</div>
+                  <div className="text-xs text-zinc-500">{testimonial.location}</div>
+                </div>
+                <CheckCircle2 className="w-6 h-6 text-green-400" />
               </div>
             </motion.div>
           ))}
         </div>
+        
+        {/* Social proof bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          className="mt-12 flex flex-wrap justify-center gap-8 items-center"
+        >
+          <div className="text-center">
+            <div className="text-3xl font-black text-white" style={{ fontFamily: 'Outfit' }}>847</div>
+            <div className="text-sm text-zinc-500">Businesses Audited</div>
+          </div>
+          <div className="h-12 w-px bg-white/10 hidden sm:block" />
+          <div className="text-center">
+            <div className="text-3xl font-black text-green-400" style={{ fontFamily: 'Outfit' }}>94%</div>
+            <div className="text-sm text-zinc-500">Saw More Leads</div>
+          </div>
+          <div className="h-12 w-px bg-white/10 hidden sm:block" />
+          <div className="text-center">
+            <div className="text-3xl font-black text-cyan-400" style={{ fontFamily: 'Outfit' }}>$2.1M</div>
+            <div className="text-sm text-zinc-500">Additional Revenue Generated</div>
+          </div>
+          <div className="h-12 w-px bg-white/10 hidden sm:block" />
+          <div className="text-center">
+            <div className="text-3xl font-black text-yellow-400" style={{ fontFamily: 'Outfit' }}>4.9/5</div>
+            <div className="text-sm text-zinc-500">Average Rating</div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
 };
 
-// Value Stack Section
+// Value Stack Section - Anchor High, Reveal Deal
 const ValueStackSection = () => {
+  const timeLeft = useCountdown();
+  
   return (
     <section className="relative py-24 lg:py-32 bg-zinc-950/50" data-testid="value-stack-section">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -614,23 +777,29 @@ const ValueStackSection = () => {
           viewport={{ once: true, margin: "-100px" }}
           className="text-center mb-16"
         >
-          <span className="uppercase text-xs tracking-[0.2em] font-bold text-cyan-400 mb-4 block">
-            Incredible Value
+          <span className="uppercase text-xs tracking-[0.2em] font-bold text-yellow-400 mb-4 block">
+            This Is Embarrassingly Cheap
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tighter text-white mb-6" style={{ fontFamily: 'Outfit' }}>
-            What You'd Pay an Agency vs.{" "}
-            <span className="gradient-text">What You Pay Today</span>
+            You Could Pay an Agency $3,900...{" "}
+            <span className="gradient-text">Or Get It All for $99</span>
           </h2>
+          <p className="text-xl text-zinc-300 max-w-3xl mx-auto">
+            We're not an agency. We don't need to justify a $3,000/month retainer. We just want to help you get visible.
+          </p>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {/* Agency pricing */}
+          {/* Agency pricing - Strike it out */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            className="feature-card"
+            className="feature-card opacity-60 relative"
           >
+            <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30">
+              <span className="text-xs font-bold text-red-400">DON'T DO THIS</span>
+            </div>
             <h3 className="text-xl font-bold text-white mb-6" style={{ fontFamily: 'Outfit' }}>
               Typical Agency Pricing
             </h3>
@@ -643,62 +812,84 @@ const ValueStackSection = () => {
                 { item: "Monthly Retainer", price: "$2,000+" }
               ].map((line, i) => (
                 <div key={i} className="flex justify-between items-center py-2 border-b border-white/5">
-                  <span className="text-zinc-400">{line.item}</span>
+                  <span className="text-zinc-500 line-through">{line.item}</span>
                   <span className="text-zinc-500 line-through">{line.price}</span>
                 </div>
               ))}
             </div>
             <div className="mt-6 pt-6 border-t border-white/10">
               <div className="text-zinc-500 text-sm">Agency Total</div>
-              <div className="text-3xl font-black text-zinc-400 line-through" style={{ fontFamily: 'Outfit' }}>
+              <div className="text-3xl font-black text-red-400 line-through" style={{ fontFamily: 'Outfit' }}>
                 $3,900+
               </div>
+              <div className="text-sm text-red-400 mt-2">+ Months of waiting</div>
             </div>
           </motion.div>
 
-          {/* GEO Boost pricing */}
+          {/* GEO Boost pricing - Make it pop */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            className="value-card-glow rounded-2xl p-8 bg-zinc-900"
+            className="value-card-glow rounded-2xl p-8 bg-zinc-900 relative"
             data-testid="value-card"
           >
-            <div className="flex items-center gap-2 mb-6">
-              <Sparkles className="w-5 h-5 text-cyan-400" />
+            {/* Popular badge */}
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full bg-gradient-to-r from-cyan-400 to-purple-500">
+              <span className="text-sm font-bold text-black">BEST VALUE</span>
+            </div>
+            
+            <div className="flex items-center gap-2 mb-6 mt-4">
+              <Zap className="w-5 h-5 text-cyan-400" />
               <h3 className="text-xl font-bold text-white" style={{ fontFamily: 'Outfit' }}>
                 GEO Boost Engine Report
               </h3>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {[
-                "Complete AI Visibility Score",
-                "Multi-Platform Analysis",
-                "Competitor Gap Report",
-                "Missed Revenue Calculator",
-                "Step-by-Step Action Plan",
-                "Priority Implementation Guide"
-              ].map((item, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-cyan-400 flex-shrink-0" />
-                  <span className="text-zinc-300">{item}</span>
+                { item: "Complete AI Visibility Score", value: "$200" },
+                { item: "Multi-Platform Analysis (ChatGPT, Google, Bing)", value: "$300" },
+                { item: "Competitor Gap Report", value: "$250" },
+                { item: "Missed Revenue Calculator", value: "$150" },
+                { item: "Step-by-Step Action Plan", value: "$400" },
+                { item: "Priority Implementation Guide", value: "$200" },
+                { item: "BONUS: 30-Day Email Support", value: "$500" }
+              ].map((line, i) => (
+                <div key={i} className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
+                    <span className="text-zinc-300 text-sm">{line.item}</span>
+                  </div>
+                  <span className="text-zinc-500 text-sm line-through">{line.value}</span>
                 </div>
               ))}
             </div>
-            <div className="mt-8 pt-6 border-t border-white/10">
-              <div className="text-cyan-400 text-sm font-bold">Your Price Today</div>
-              <div className="flex items-baseline gap-3">
-                <span className="text-5xl font-black text-white" style={{ fontFamily: 'Outfit' }}>$99</span>
-                <span className="text-zinc-500 line-through">$1,000+ value</span>
+            <div className="mt-6 pt-6 border-t border-cyan-400/30 bg-cyan-400/5 -mx-8 px-8 pb-2">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-zinc-400 text-sm">Total Value:</span>
+                <span className="text-zinc-400 line-through">$2,000</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-cyan-400 text-sm font-bold">Your Price Today:</span>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-4xl font-black text-white" style={{ fontFamily: 'Outfit' }}>$99</span>
+                </div>
+              </div>
+              <div className="text-center mt-2">
+                <span className="text-xs text-yellow-400">Price increases to $299 in {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}</span>
               </div>
             </div>
             <a 
               href={PAYPAL_LINK}
               data-testid="value-stack-cta-button"
-              className="cta-button w-full justify-center mt-6 text-lg"
+              className="cta-button-hero w-full justify-center mt-6 text-lg py-4"
             >
-              Get My Report Now <ArrowRight className="w-5 h-5" />
+              YES! I Want This Deal <ArrowRight className="w-5 h-5" />
             </a>
+            <div className="text-center mt-4 flex items-center justify-center gap-4 text-xs text-zinc-500">
+              <span className="flex items-center gap-1"><ShieldCheck className="w-3 h-3 text-green-400" /> 30-Day Guarantee</span>
+              <span className="flex items-center gap-1"><Clock className="w-3 h-3 text-cyan-400" /> Instant Access</span>
+            </div>
           </motion.div>
         </div>
       </div>
@@ -858,8 +1049,10 @@ const FAQSection = () => {
   );
 };
 
-// Final CTA Section
+// Final CTA Section - Emotional Close
 const FinalCTASection = () => {
+  const timeLeft = useCountdown();
+  
   return (
     <section className="relative py-24 lg:py-32 overflow-hidden" data-testid="final-cta-section">
       <div className="absolute inset-0">
@@ -873,36 +1066,77 @@ const FinalCTASection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-black tracking-tighter text-white mb-6" style={{ fontFamily: 'Outfit' }}>
-            Stop Being <span className="gradient-text">Invisible to AI</span>
-          </h2>
-
-          <p className="text-xl text-zinc-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Your competitors are already optimizing for AI search. Every day you wait is another day of lost customers, lost revenue, and lost market share. Take action now.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-            <a 
-              href={PAYPAL_LINK}
-              data-testid="final-cta-button"
-              className="cta-button text-xl py-5 px-12"
-            >
-              Get My GEO Boost Report – $99 <Zap className="w-6 h-6" />
-            </a>
+          {/* Final urgency badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/30 mb-6">
+            <Timer className="w-4 h-4 text-red-400 animate-pulse" />
+            <span className="text-sm font-bold text-red-400">
+              $99 price expires in {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
+            </span>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-zinc-500">
+          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-black tracking-tighter text-white mb-6" style={{ fontFamily: 'Outfit' }}>
+            You Have Two Choices Right Now
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-6 mb-10 max-w-3xl mx-auto text-left">
+            {/* Bad choice */}
+            <div className="p-6 rounded-xl bg-red-500/5 border border-red-500/20">
+              <div className="flex items-center gap-2 mb-3">
+                <XCircle className="w-5 h-5 text-red-400" />
+                <span className="font-bold text-red-400">Option A: Do Nothing</span>
+              </div>
+              <ul className="space-y-2 text-sm text-zinc-400">
+                <li>• Keep losing customers to AI-optimized competitors</li>
+                <li>• Watch your phone ring less each month</li>
+                <li>• Hope things magically get better (they won't)</li>
+                <li>• Lose another $5,000-$15,000 this month</li>
+              </ul>
+            </div>
+            
+            {/* Good choice */}
+            <div className="p-6 rounded-xl bg-green-500/5 border border-green-500/20">
+              <div className="flex items-center gap-2 mb-3">
+                <CheckCircle2 className="w-5 h-5 text-green-400" />
+                <span className="font-bold text-green-400">Option B: Take Action</span>
+              </div>
+              <ul className="space-y-2 text-sm text-zinc-400">
+                <li>• Get your AI visibility report in 24-48 hours</li>
+                <li>• Know EXACTLY why you're invisible</li>
+                <li>• Follow the step-by-step fix plan</li>
+                <li>• Start getting AI referrals within weeks</li>
+              </ul>
+            </div>
+          </div>
+
+          <p className="text-2xl text-white font-bold mb-8" style={{ fontFamily: 'Outfit' }}>
+            The choice is obvious. The only question is:{" "}
+            <span className="gradient-text">will you act now, or regret it later?</span>
+          </p>
+
+          <a 
+            href={PAYPAL_LINK}
+            data-testid="final-cta-button"
+            className="cta-button-hero text-xl py-6 px-14 inline-flex"
+          >
+            <span className="flex flex-col items-center">
+              <span>YES! Show Me Why I'm Invisible – $99</span>
+              <span className="text-sm opacity-80 mt-1">Instant access • 30-day guarantee</span>
+            </span>
+            <Zap className="w-6 h-6 ml-3 animate-pulse" />
+          </a>
+
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-zinc-500 mt-8">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-cyan-400" />
-              30-Day Money-Back Guarantee
+              <ShieldCheck className="w-4 h-4 text-green-400" />
+              100% Money-Back Guarantee
             </div>
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-cyan-400" />
-              Instant Digital Delivery
+              24-48 Hour Delivery
             </div>
             <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-cyan-400" />
-              Trusted by 100+ Businesses
+              <Users className="w-4 h-4 text-purple-400" />
+              847 Businesses Can't Be Wrong
             </div>
           </div>
         </motion.div>
@@ -934,9 +1168,10 @@ const Footer = () => {
   );
 };
 
-// Sticky CTA Component
+// Sticky CTA Component - With Urgency
 const StickyCTA = () => {
   const [visible, setVisible] = useState(false);
+  const timeLeft = useCountdown();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -954,20 +1189,25 @@ const StickyCTA = () => {
   return (
     <div className="sticky-cta visible" data-testid="sticky-cta">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="text-center sm:text-left">
-          <div className="text-white font-bold" style={{ fontFamily: 'Outfit' }}>
-            Ready to dominate AI search?
+        <div className="text-center sm:text-left flex items-center gap-4">
+          <div className="hidden sm:block">
+            <div className="text-white font-bold" style={{ fontFamily: 'Outfit' }}>
+              Stop losing customers to AI
+            </div>
+            <div className="text-sm text-zinc-400">
+              $99 price expires in <span className="text-red-400 font-mono font-bold">{String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}</span>
+            </div>
           </div>
-          <div className="text-sm text-zinc-400">
-            Get your personalized report for just $99
+          <div className="sm:hidden text-sm text-red-400 font-mono font-bold">
+            Expires: {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
           </div>
         </div>
         <a 
           href={PAYPAL_LINK}
           data-testid="sticky-cta-button"
-          className="cta-button whitespace-nowrap"
+          className="cta-button whitespace-nowrap animate-pulse-glow-fast"
         >
-          Get My Report <ArrowRight className="w-4 h-4" />
+          Get My Report – $99 <ArrowRight className="w-4 h-4" />
         </a>
       </div>
     </div>
