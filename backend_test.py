@@ -169,6 +169,28 @@ class GEOBoostAPITester:
         )
         return success and response.get('status') == 'success'
 
+    def test_create_free_lead(self):
+        """Test creating a free lead"""
+        test_free_lead_data = {
+            "business_name": f"Free Test Business {datetime.now().strftime('%H%M%S')}",
+            "email": "test@freebusiness.com",
+            "location": "Los Angeles, CA"
+        }
+        
+        success, response = self.run_test(
+            "Create Free Lead",
+            "POST",
+            "api/free-leads",
+            200,
+            data=test_free_lead_data
+        )
+        
+        if success and 'id' in response:
+            self.created_free_lead_id = response['id']
+            print(f"   Created free lead ID: {self.created_free_lead_id}")
+            return True
+        return False
+
     def test_analytics_tracking(self):
         """Test analytics tracking endpoint"""
         tracking_data = {
@@ -195,6 +217,9 @@ class GEOBoostAPITester:
 
         # Test API root
         self.test_api_root()
+        
+        # Test free lead creation
+        self.test_create_free_lead()
         
         # Test lead creation and retrieval
         if self.test_create_lead():

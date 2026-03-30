@@ -19,14 +19,17 @@ import {
   AlertTriangle,
   Star,
   Phone,
-  DollarSign
+  DollarSign,
+  Gift
 } from "lucide-react";
 import BusinessForm from "../components/BusinessForm";
+import FreeReportForm from "../components/FreeReportForm";
 import { trackCTAClick, trackFormOpen, trackScrollDepth } from "../components/AnalyticsTracker";
 
 const LandingPage = () => {
   const [openFaq, setOpenFaq] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [showFreeForm, setShowFreeForm] = useState(false);
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
   const [hoveredTestimonial, setHoveredTestimonial] = useState(null);
   const [isVisible, setIsVisible] = useState({
@@ -84,6 +87,12 @@ const LandingPage = () => {
     trackCTAClick(location);
     trackFormOpen();
     setShowForm(true);
+  };
+
+  const handleFreeReportClick = (location) => {
+    trackCTAClick(`free_${location}`);
+    trackFormOpen();
+    setShowFreeForm(true);
   };
 
   const scrollToCTA = () => {
@@ -195,16 +204,17 @@ const LandingPage = () => {
     <div className="min-h-screen bg-[#050505] text-white">
       {/* Sticky Header */}
       <header className="sticky-header" data-testid="header">
-        <div className="container-custom flex items-center justify-between py-4 px-6">
+        <div className="container-custom flex items-center justify-between py-3 px-4 md:py-4 md:px-6">
           <div className="logo-text text-white" data-testid="logo">
             GEO<span className="text-emerald-400">Boost</span>
           </div>
           <button 
-            onClick={() => handleCTAClick('header')}
-            className="cta-button text-sm py-2 px-6"
+            onClick={() => handleFreeReportClick('header')}
+            className="bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-semibold py-2 px-4 rounded-full transition-all flex items-center gap-1.5"
             data-testid="header-cta"
           >
-            Get Your Report
+            <Gift className="w-3.5 h-3.5" />
+            Free Report
           </button>
         </div>
       </header>
@@ -842,18 +852,26 @@ const LandingPage = () => {
       <div className="mobile-sticky-cta md:hidden" data-testid="mobile-sticky-cta">
         <button 
           onClick={() => handleCTAClick('mobile-sticky')}
-          className="cta-button w-full py-4"
+          className="cta-button w-full py-3.5 text-base"
         >
-          Get My Report – $199
-          <ArrowRight className="w-5 h-5" />
+          Get Full Report – $199
+          <ArrowRight className="w-4 h-4" />
         </button>
       </div>
 
-      {/* Business Form Modal */}
+      {/* Business Form Modal (Paid) */}
       {showForm && (
         <BusinessForm 
           onSuccess={() => setShowForm(false)}
           onCancel={() => setShowForm(false)}
+        />
+      )}
+
+      {/* Free Report Form Modal */}
+      {showFreeForm && (
+        <FreeReportForm 
+          onSuccess={() => setShowFreeForm(false)}
+          onCancel={() => setShowFreeForm(false)}
         />
       )}
     </div>

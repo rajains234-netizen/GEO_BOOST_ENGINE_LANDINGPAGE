@@ -68,6 +68,21 @@ class BusinessLeadCreate(BaseModel):
     phone: str
     business_type: str
 
+# Free Lead Model (for free report opt-in)
+class FreeLead(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    business_name: str
+    email: str
+    location: str
+    report_sent: bool = False
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class FreeLeadCreate(BaseModel):
+    business_name: str
+    email: EmailStr
+    location: str
+
 # Payment Models
 class PaymentSessionCreate(BaseModel):
     lead_id: str
@@ -212,6 +227,131 @@ async def get_lead(lead_id: str):
         raise HTTPException(status_code=404, detail="Lead not found")
     if isinstance(lead['created_at'], str):
         lead['created_at'] = datetime.fromisoformat(lead['created_at'])
+    return lead
+
+# ============ FREE LEAD ENDPOINTS ============
+
+def send_free_report_email(to_email: str, business_name: str):
+    """Send free report email via SendGrid"""
+    sendgrid_api_key = os.environ.get('SENDGRID_API_KEY')
+    sender_email = os.environ.get('SENDER_EMAIL', 'noreply@geoboost.com')
+    
+    if not sendgrid_api_key or sendgrid_api_key == 'YOUR_SENDGRID_API_KEY_HERE':
+        logger.warning("SendGrid API key not configured. Free report email not sent.")
+        return False
+    
+    subject = f"Your Free AI Visibility Snapshot - {business_name}"
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }}
+            .container {{ max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }}
+            .header {{ background: linear-gradient(135deg, #059669 0%, #10B981 100%); padding: 40px 30px; text-align: center; }}
+            .header h1 {{ color: white; margin: 0; font-size: 24px; }}
+            .header p {{ color: rgba(255,255,255,0.8); margin-top: 8px; font-size: 14px; }}
+            .content {{ padding: 40px 30px; }}
+            .content h2 {{ color: #1f2937; margin-top: 0; font-size: 20px; }}
+            .content p {{ color: #4b5563; line-height: 1.7; }}
+            .snapshot-box {{ background: #f0fdf4; border: 2px solid #10B981; padding: 24px; margin: 24px 0; border-radius: 12px; }}
+            .snapshot-title {{ color: #059669; font-weight: bold; font-size: 18px; margin-bottom: 16px; }}
+            .insight {{ background: white; border-left: 4px solid #10B981; padding: 16px; margin: 12px 0; border-radius: 0 8px 8px 0; }}
+            .insight-title {{ font-weight: bold; color: #1f2937; margin-bottom: 4px; }}
+            .insight-text {{ color: #6b7280; font-size: 14px; }}
+            .cta-box {{ background: #1f2937; border-radius: 12px; padding: 24px; text-align: center; margin-top: 24px; }}
+            .cta-box h3 {{ color: white; margin: 0 0 8px 0; }}
+            .cta-box p {{ color: #9ca3af; font-size: 14px; margin: 0 0 16px 0; }}
+            .cta-button {{ display: inline-block; background: #10B981; color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; }}
+            .footer {{ background: #f9fafb; padding: 24px; text-align: center; color: #6b7280; font-size: 13px; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>GEO Boost Engine</h1>
+                <p>Free AI Visibility Snapshot</p>
+            </div>
+            <div class="content">
+                <h2>Your Free Snapshot for {business_name}</h2>
+                <p>Thank you for requesting your free AI visibility snapshot! Here's a quick overview of how businesses like yours typically appear across AI platforms.</p>
+                
+                <div class="snapshot-box">
+                    <div class="snapshot-title">📊 Quick Visibility Overview</div>
+                    
+                    <div class="insight">
+                        <div class="insight-title">1. AI Platform Coverage</div>
+                        <div class="insight-text">Most local businesses are only visible on 1-2 AI platforms out of 4+ major ones. ChatGPT, Google AI, Perplexity, and Bing Copilot all use different signals to recommend businesses.</div>
+                    </div>
+                    
+                    <div class="insight">
+                        <div class="insight-title">2. Common Visibility Gap</div>
+                        <div class="insight-text">Over 70% of local businesses we analyze have inconsistent business information across the web, which confuses AI systems and reduces recommendations.</div>
+                    </div>
+                    
+                    <div class="insight">
+                        <div class="insight-title">3. Quick Win Opportunity</div>
+                        <div class="insight-text">Businesses that optimize their Google Business Profile and get mentioned on local directories see an average 40% improvement in AI recommendations within 30 days.</div>
+                    </div>
+                </div>
+                
+                <p>This snapshot gives you a general overview. For a <strong>complete, personalized audit</strong> of your specific business — including competitor analysis, your exact visibility score, and a step-by-step fix plan — consider our full AI Visibility Report.</p>
+                
+                <div class="cta-box">
+                    <h3>Want the Full Picture?</h3>
+                    <p>Get your complete AI Visibility Report with 30+ analyzed signals, competitor breakdown, and exact fixes.</p>
+                    <a href="https://citacy.com" class="cta-button">Get Full Report – $199</a>
+                </div>
+            </div>
+            <div class="footer">
+                <p>© 2026 GEO Boost Engine. All rights reserved.</p>
+                <p>You're receiving this because you requested a free AI visibility snapshot.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    
+    try:
+        message = Mail(
+            from_email=Email(sender_email, "GEO Boost Engine"),
+            to_emails=To(to_email),
+            subject=subject,
+            html_content=Content("text/html", html_content)
+        )
+        
+        sg = SendGridAPIClient(sendgrid_api_key)
+        response = sg.send(message)
+        logger.info(f"Free report email sent to {to_email}, status: {response.status_code}")
+        return response.status_code == 202
+    except Exception as e:
+        logger.error(f"Failed to send free report email: {str(e)}")
+        return False
+
+@api_router.post("/free-leads", response_model=FreeLead)
+async def create_free_lead(lead_data: FreeLeadCreate, background_tasks: BackgroundTasks):
+    """Create a new free lead and send free report email"""
+    lead = FreeLead(**lead_data.model_dump())
+    doc = lead.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    
+    await db.free_leads.insert_one(doc)
+    logger.info(f"New free lead created: {lead.id} - {lead.business_name}")
+    
+    # Send free report email in background
+    background_tasks.add_task(
+        send_free_report_email,
+        lead.email,
+        lead.business_name
+    )
+    
+    # Update report_sent status
+    await db.free_leads.update_one(
+        {"id": lead.id},
+        {"$set": {"report_sent": True}}
+    )
+    
     return lead
 
 # ============ PAYMENT ENDPOINTS ============
