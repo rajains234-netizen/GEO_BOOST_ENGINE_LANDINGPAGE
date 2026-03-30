@@ -182,7 +182,7 @@ const FreeReportForm = ({ onSuccess, onCancel }) => {
                 <Check className="w-4 h-4 text-emerald-400" /> Top 3 visibility gaps
               </li>
               <li className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-emerald-400" /> Estimated revenue lost
+                <Check className="w-4 h-4 text-emerald-400" /> Estimated revenue loss
               </li>
             </ul>
           </div>
