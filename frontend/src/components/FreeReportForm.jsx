@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowRight, Mail, Building2, MapPin, Loader2, Check, Gift } from "lucide-react";
+import { ArrowRight, Mail, Building2, MapPin, Globe, Loader2, Check, Gift, X } from "lucide-react";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -7,6 +7,7 @@ const FreeReportForm = ({ onSuccess, onCancel }) => {
   const [formData, setFormData] = useState({
     business_name: "",
     email: "",
+    website: "",
     location: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -61,7 +62,16 @@ const FreeReportForm = ({ onSuccess, onCancel }) => {
   if (isSubmitted) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" data-testid="free-report-success">
-        <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl w-full max-w-md p-8 text-center">
+        <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl w-full max-w-md p-8 text-center relative">
+          {/* Close button */}
+          <button 
+            onClick={onCancel}
+            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-zinc-400 hover:text-white transition-colors"
+            data-testid="close-success-btn"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          
           <div className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
             <Check className="w-10 h-10 text-emerald-500" />
           </div>
@@ -85,7 +95,7 @@ const FreeReportForm = ({ onSuccess, onCancel }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" data-testid="free-report-form-modal">
-      <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl w-full max-w-md">
+      <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl w-full max-w-md relative">
         {/* Header */}
         <div className="bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 px-6 py-5 flex items-center justify-between rounded-t-2xl border-b border-white/10">
           <div className="flex items-center gap-3">
@@ -99,17 +109,15 @@ const FreeReportForm = ({ onSuccess, onCancel }) => {
           </div>
           <button 
             onClick={onCancel}
-            className="text-zinc-500 hover:text-white transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-zinc-400 hover:text-white transition-colors"
             data-testid="close-free-form-btn"
           >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {/* Business Name */}
           <div>
             <label className={labelClasses}>
@@ -125,6 +133,24 @@ const FreeReportForm = ({ onSuccess, onCancel }) => {
               placeholder="e.g., Smith's HVAC Services"
               className={inputClasses}
               data-testid="free-input-business-name"
+            />
+          </div>
+
+          {/* Website */}
+          <div>
+            <label className={labelClasses}>
+              <Globe className="w-4 h-4 inline mr-2" />
+              Website *
+            </label>
+            <input
+              type="url"
+              name="website"
+              value={formData.website}
+              onChange={handleChange}
+              required
+              placeholder="https://yourwebsite.com"
+              className={inputClasses}
+              data-testid="free-input-website"
             />
           </div>
 

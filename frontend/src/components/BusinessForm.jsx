@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowRight, Building2, Globe, MapPin, User, Mail, Phone, Briefcase, Loader2, Check } from "lucide-react";
+import { ArrowRight, Building2, Globe, MapPin, User, Mail, Phone, Briefcase, Loader2, Check, X } from "lucide-react";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -103,7 +103,7 @@ const BusinessForm = ({ onSuccess, onCancel }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" data-testid="business-form-modal">
-      <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto relative">
         {/* Header */}
         <div className="sticky top-0 bg-[#0A0A0A] border-b border-white/10 px-6 py-4 flex items-center justify-between">
           <div>
@@ -112,12 +112,10 @@ const BusinessForm = ({ onSuccess, onCancel }) => {
           </div>
           <button 
             onClick={onCancel}
-            className="text-zinc-500 hover:text-white transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-zinc-400 hover:text-white transition-colors"
             data-testid="close-form-btn"
           >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <X className="w-5 h-5" />
           </button>
         </div>
 

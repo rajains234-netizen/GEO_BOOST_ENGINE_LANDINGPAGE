@@ -74,6 +74,7 @@ class FreeLead(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     business_name: str
     email: str
+    website: str
     location: str
     report_sent: bool = False
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
@@ -81,6 +82,7 @@ class FreeLead(BaseModel):
 class FreeLeadCreate(BaseModel):
     business_name: str
     email: EmailStr
+    website: str
     location: str
 
 # Payment Models

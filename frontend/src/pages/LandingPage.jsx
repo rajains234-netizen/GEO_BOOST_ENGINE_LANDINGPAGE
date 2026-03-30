@@ -46,6 +46,7 @@ const LandingPage = () => {
   });
   const sectionRefs = useRef({});
   const testimonialCarouselRef = useRef(null);
+  const [showDesktopSticky, setShowDesktopSticky] = useState(false);
 
   useEffect(() => {
     // Set hero visible immediately
@@ -66,7 +67,7 @@ const LandingPage = () => {
       if (ref) observer.observe(ref);
     });
 
-    // Track scroll depth
+    // Track scroll depth and show/hide desktop sticky CTA
     let maxScroll = 0;
     const handleScroll = () => {
       const scrollPercent = Math.round((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
@@ -74,6 +75,9 @@ const LandingPage = () => {
         maxScroll = scrollPercent;
         trackScrollDepth(scrollPercent);
       }
+      
+      // Show desktop sticky CTA after scrolling past hero (400px)
+      setShowDesktopSticky(window.scrollY > 400);
     };
     window.addEventListener('scroll', handleScroll);
 
@@ -856,6 +860,20 @@ const LandingPage = () => {
         >
           Get Full Report – $199
           <ArrowRight className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Desktop Sticky CTA */}
+      <div 
+        className={`hidden md:block fixed bottom-6 right-6 z-40 transition-all duration-300 ${showDesktopSticky ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}
+        data-testid="desktop-sticky-cta"
+      >
+        <button 
+          onClick={() => handleCTAClick('desktop-sticky')}
+          className="cta-button py-4 px-8 shadow-2xl"
+        >
+          Get Full Report – $199
+          <ArrowRight className="w-5 h-5" />
         </button>
       </div>
 
