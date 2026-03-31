@@ -1,30 +1,40 @@
 {
-  "project_name": "GEO Boost Engine Landing Page",
   "theme": "dark",
-  "archetype": "Electric & Neon / Jewel & Luxury (Dialed for Local Business Trust)",
   "typography": {
     "headings": {
-      "font_family": "Outfit, sans-serif",
-      "weights": ["400", "700", "900"],
-      "styling": "tracking-tighter leading-none text-white",
-      "usage": "Use for all H1-H4. Never use Inter or generic sans. Ensure tight letter spacing for large headers."
+      "family": "Outfit",
+      "weights": ["300", "500", "800"],
+      "tracking": "tracking-tight",
+      "line_height": "leading-none",
+      "description": "Tech-forward, authoritative yet approachable. Extreme contrast in weights (Light for modifiers, Black for keywords)."
     },
     "body": {
-      "font_family": "Plus Jakarta Sans, sans-serif",
+      "family": "Manrope",
       "weights": ["400", "500"],
-      "styling": "tracking-normal leading-relaxed text-zinc-300",
-      "usage": "Use for all paragraphs, labels, and small text. Prioritize readability."
+      "tracking": "tracking-normal",
+      "line_height": "leading-relaxed",
+      "description": "Highly readable, geometric sans."
     },
     "labels": {
-      "styling": "uppercase text-xs tracking-[0.2em] font-bold text-cyan-400"
-    },
-    "general": "Do not default to bold for headers. Use black (font-black) for massive impact or light (font-light) for contrast."
+      "family": "Outfit",
+      "weights": ["700"],
+      "tracking": "tracking-[0.2em]",
+      "text_transform": "uppercase",
+      "size": "text-xs"
+    }
   },
   "colors": {
+    "primary": {
+      "base": "#EAB308",
+      "hover": "#FDE047",
+      "active": "#CA8A04",
+      "description": "Bright Cyber Yellow. Used strictly for CTAs to create high contrast against dark backgrounds."
+    },
     "background": {
-      "primary": "#050505",
-      "secondary": "#0A0A0A",
-      "tertiary": "#121212"
+      "base": "#050505",
+      "surface": "#0A0A0A",
+      "surface_elevated": "#121212",
+      "description": "Deepest void black. Not purely #000, slightly tinted for depth."
     },
     "text": {
       "primary": "#FFFFFF",
@@ -32,126 +42,160 @@
       "muted": "#71717A"
     },
     "accent": {
-      "primary": "#00F0FF",
-      "secondary": "#7000FF",
-      "glow": "rgba(0, 240, 255, 0.3)"
+      "blue": "#3B82F6",
+      "green": "#22C55E",
+      "description": "Used sparsely for glowing nodes, map pins, and data visualizations."
     },
-    "rules": [
-      "No full-screen gradients. Use massive, heavily blurred (blur-3xl) colored orbs behind sections for ambient lighting.",
-      "Never use pure black without text contrast. Tinted greys (e.g. zinc) ensure dark backgrounds feel premium, not muddy.",
-      "Only use the primary accent (Cyan) for CTAs and interactive triggers. Limit its use elsewhere."
-    ]
+    "border": {
+      "default": "rgba(255, 255, 255, 0.1)",
+      "highlight": "rgba(255, 255, 255, 0.2)"
+    }
   },
-  "visual_enhancers": {
-    "glassmorphism": "bg-black/60 backdrop-blur-xl border-b border-white/10. Use for the sticky navbar and floating action items.",
-    "cards": "bg-zinc-900/40 border border-white/10 hover:border-white/30 transition-colors duration-300.",
-    "gradients": "Use text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500 sparingly, only on key H2 phrases.",
-    "glow_effects": "Use drop-shadow-[0_0_15px_rgba(0,240,255,0.4)] on primary CTA buttons. Consider the 'Tracing Beam' effect for high-conversion pricing/value cards.",
-    "textures": "Add a subtle CSS noise/grain overlay class to the main background to eliminate the digital flatness."
-  },
-  "layouts_and_grids": {
-    "spacing": "Generous spacing. Use py-24 or py-32 for section padding. Containers with borders MUST have internal padding (p-8 or p-12) to prevent text collision.",
-    "hero": "Asymmetrical layout. Left-aligned heavy typography (max-w-3xl) with an overlapping glowing abstract visual on the right. min-h-[90vh] flex items-center.",
-    "bento_grid": "Mode A: The Tetris Grid. Base Grid: grid-cols-1 md:grid-cols-12 gap-8 to gap-12. Span Logic: The Hero: col-span-full md:col-span-8 row-span-2. The Square: col-span-4 row-span-1. Never fill 100% of the grid perfectly; leave empty cells for offset alignment.",
-    "alignment": "Mobile-first grids. Left-align typography in dense content, cards, and paragraphs. Only center-align section titles if it creates tension."
+  "spacing": {
+    "container_padding": "px-6 md:px-12 lg:px-24",
+    "section_gap": "py-24 md:py-32 lg:py-40",
+    "element_gap": "gap-8 md:gap-12 lg:gap-16",
+    "philosophy": "Generous Spacing Philosophy. Use 2-3x more spacing than typical designs to give breathing room. Emphasize emptiness to draw focus to the copy and CTA."
   },
   "components": {
-    "cta_button": {
-      "style": "bg-cyan-500 text-black font-extrabold px-10 py-5 rounded-full transition-transform hover:scale-105 hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] flex items-center gap-2",
-      "behavior": "External link to PayPal payment ($99). Must have data-testid='buy-now-button'."
+    "buttons": {
+      "cta": {
+        "bg": "bg-yellow-500",
+        "text": "text-black",
+        "hover": "hover:bg-yellow-400 hover:text-black",
+        "radius": "rounded-full",
+        "padding": "px-8 py-4",
+        "font": "font-bold text-lg tracking-tight",
+        "animation": "transition-transform hover:-translate-y-1 active:translate-y-0",
+        "shadow": "shadow-[0_0_30px_rgba(234,179,8,0.3)] hover:shadow-[0_0_40px_rgba(234,179,8,0.5)]"
+      },
+      "secondary": {
+        "bg": "bg-transparent",
+        "text": "text-white",
+        "border": "border border-white/20",
+        "hover": "hover:bg-white/5 hover:border-white/40",
+        "radius": "rounded-full",
+        "padding": "px-6 py-3"
+      }
     },
-    "accordion_faq": {
-      "style": " border-b border-white/10 py-6. Summary text text-xl font-medium cursor-pointer flex justify-between items-center. Use raw div with motion.div for dropdown.",
-      "icon": "Lucide Plus/Minus"
+    "cards": {
+      "bento": {
+        "bg": "bg-[#0A0A0A]",
+        "border": "border border-white/10",
+        "radius": "rounded-3xl",
+        "padding": "p-8 md:p-12",
+        "hover": "hover:border-white/20 transition-colors duration-300",
+        "shadow": "shadow-2xl"
+      },
+      "pricing": {
+        "bg": "bg-gradient-to-b from-[#121212] to-[#0A0A0A]",
+        "border": "border border-yellow-500/30",
+        "radius": "rounded-3xl",
+        "padding": "p-12",
+        "highlight": "relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-yellow-500/10 before:to-transparent"
+      }
     },
-    "testimonial_card": {
-      "style": "Glassmorphism or flat dark card, rounded-2xl, p-8. Includes a 48x48 rounded-full avatar, 5 gold stars (Lucide Star fill-current), and text-lg italic body text."
+    "header": {
+      "bg": "bg-black/60",
+      "blur": "backdrop-blur-xl",
+      "border": "border-b border-white/10",
+      "position": "fixed top-0 w-full z-50"
     }
   },
-  "sections_breakdown": [
-    {
-      "name": "Sticky Header",
-      "description": "Crystal Glassmorphism nav. Brand logo 'GEO Boost Engine' on left. Small CTA button 'Get My Report' on right."
-    },
-    {
-      "name": "Hero Section",
-      "description": "Massive H1 ('AI Won\\'t Recommend You Unless You Tell It How'). Subheadline addressing the local business pain point. Two buttons: Primary ($99 Report) and Secondary (How it works). Background uses a dark abstract glowing map overlay."
-    },
-    {
-      "name": "Problem Agitation (The Gap)",
-      "description": "3 staggered cards explaining why traditional SEO is dead and AI Search (ChatGPT, Google AI, Bing) is the new reality. Use subtle red/orange glows for danger."
-    },
-    {
-      "name": "How It Works (3 Steps)",
-      "description": "Vertical timeline with connecting lines. 1: Scan footprint. 2: Inject data into AI. 3: Dominate AI recommendations. Use large numbered typography (text-8xl text-white/5 font-black) behind the text."
-    },
-    {
-      "name": "What You Get (Bento Grid)",
-      "description": "Tetris Bento layout for the $99 report deliverables. e.g., 'Custom AI Prompts', 'Local Optimization Checklist', 'Competitor Gap Analysis'."
-    },
-    {
-      "name": "Social Proof",
-      "description": "Testimonials from local business owners (HVAC, Med Spa) who saw increased calls after GEO Boost."
-    },
-    {
-      "name": "Value Stack",
-      "description": "Split comparison layout. 'Agency Retainer: $2000/mo' vs 'GEO Boost Engine: One-time $99'. High contrast, highlighting the insane value. Highlight the $99 box with a glowing border."
-    },
-    {
-      "name": "Final CTA",
-      "description": "Centered block with massive background gradient orb (cyan to purple). Final push to buy. Includes scarcity text ('Reports are hand-verified. Limited to 50 per week.')."
-    }
-  ],
-  "motion_and_interactions": {
-    "scroll": "Use framer-motion for fade-up and slight translate-y on scroll (initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }}).",
-    "buttons": "Micro-interactions on hover. Active scale-down. Transition transform 0.2s ease, box-shadow 0.2s ease.",
-    "ambient": "Slow CSS pulse or floating animation on background blur orbs to simulate 'AI thinking'. Add pointer-events-none."
+  "layout": {
+    "grid_system": "The Bento Grid Protocol (Tetris Mode)",
+    "description": "Asymmetry creates tension. Use 12-column grids with varying span widths (e.g., col-span-8 and col-span-4) to prevent boring perfectly symmetrical layouts."
   },
-  "accessibility": {
-    "contrast": "Ensure text-zinc-300 has a minimum 4.5:1 ratio against #0A0A0A. Use text-white for headings.",
-    "interactive": "Focus states must have ring-2 ring-cyan-500. Add aria-expanded to FAQ accordions.",
-    "testing": "All buttons, links, and form inputs MUST include a data-testid attribute in kebab-case."
+  "visual_enhancers": {
+    "textures": "Subtle noise overlay on the entire body to kill digital flatness.",
+    "glows": "Soft, blurred radial gradients behind key elements (like the hero text and CTA) to create a 'Tracing Beam' effect.",
+    "glassmorphism": "Used for sticky header and floating elements. Must include 1px delicate inner stroke to separate from background."
+  },
+  "motion": {
+    "scroll": "Smooth scrolling via lenis.",
+    "entrance": "Staggered fade-up for bento grid items and text. Use Framer Motion.",
+    "micro_interactions": "Hover lifts on cards, glow intensification on CTA buttons.",
+    "parallax": "Subtle parallax on background abstract elements."
   },
   "media": {
     "images": [
       {
-        "url": "https://images.unsplash.com/photo-1643087241268-171145387a05?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1OTV8MHwxfHNlYXJjaHwzfHxnb29nbGUlMjBtYXBzJTIwcGluJTIwbG9jYWwlMjBidXNpbmVzcyUyMGdsb3dpbmd8ZW58MHx8fHwxNzc0MjQ4MDM1fDA&ixlib=rb-4.1.0&q=85",
-        "category": "Hero Background Overlay",
-        "description": "Abstract glowing city map. Use as absolute positioned background with opacity-20 and mix-blend-screen."
+        "url": "https://images.unsplash.com/photo-1602731465517-820d34d5a9c3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1Mjh8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGdsb3dpbmclMjBtYXAlMjBub2Rlc3xlbnwwfHx8fDE3NzQyOTA5NjB8MA&ixlib=rb-4.1.0&q=85",
+        "category": "hero_background",
+        "description": "Abstract glowing map nodes, used as a subtle, low-opacity background behind the hero section to represent AI and location data."
       },
       {
-        "url": "https://images.unsplash.com/photo-1758887261865-a2b89c0f7ac5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDB8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBidXNpbmVzcyUyMG93bmVyJTIwcG9ydHJhaXR8ZW58MHx8fHwxNzc0MjQ4MDQyfDA&ixlib=rb-4.1.0&q=85",
-        "category": "Testimonial Avatar 1",
-        "description": "Professional local business owner avatar. Use inside a rounded-full img tag."
+        "url": "https://images.pexels.com/photos/10375895/pexels-photo-10375895.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "category": "social_proof",
+        "description": "Joyful business owners. Used in the problem/solution transition to show successful clients."
       },
       {
-        "url": "https://images.unsplash.com/photo-1769636930047-4478f12cf430?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDB8MHwxfHNlYXJjaHwyfHxwcm9mZXNzaW9uYWwlMjBidXNpbmVzcyUyMG93bmVyJTIwcG9ydHJhaXR8ZW58MHx8fHwxNzc0MjQ4MDQyfDA&ixlib=rb-4.1.0&q=85",
-        "category": "Testimonial Avatar 2",
-        "description": "Professional local business owner avatar 2. Use inside a rounded-full img tag."
+        "url": "https://images.pexels.com/photos/6077664/pexels-photo-6077664.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "category": "testimonial_portrait",
+        "description": "Portrait of a happy businessman. Used for the HVAC or Plumber testimonial."
+      },
+      {
+        "url": "https://images.pexels.com/photos/36499769/pexels-photo-36499769.png?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "category": "testimonial_portrait",
+        "description": "Smiling woman wearing a blazer. Used for the Dentist or Lawyer testimonial."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1714859100390-7f3a57e5ae74?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzJ8MHwxfHNlYXJjaHwyfHxsb2NhbCUyMGJ1c2luZXNzJTIwb3duZXIlMjB0YWJsZXR8ZW58MHx8fHwxNzc0MjkwOTU5fDA&ixlib=rb-4.1.0&q=85",
+        "category": "feature_showcase",
+        "description": "Person holding a tablet. Used to illustrate receiving and viewing the AI Visibility Report."
       }
-    ],
-    "icons": "Use lucide-react. Suggested: Sparkles, BrainCircuit, TrendingUp, MapPin, Zap, Crosshair, Plus, Minus, Star, CheckCircle2."
+    ]
   },
-  "instructions_to_main_agent": [
-    "Build a single-page React app using .js / .jsx extensions ONLY (no .tsx).",
-    "Use standard HTML structure combined with Tailwind CSS. Avoid relying heavily on rigid Shadcn structural components for this creative layout; use raw HTML/Tailwind for the heavy lifting, grids, and hero sections.",
-    "Install and import 'framer-motion' for scroll reveal animations.",
-    "Install and import 'lucide-react' for all icons.",
-    "Implement the 'Bento Grid' exactly as specified, utilizing col-span and row-span to create asymmetry.",
-    "Ensure the hero CTA directly links to a payment checkout URL (e.g., href='https://paypal.com/ncp/payment/YOUR_ID' or placeholder) and doesn't trap the user in an unnecessary form.",
-    "Include Google Fonts via index.html or index.css (@import) for 'Outfit' and 'Plus Jakarta Sans'.",
-    "Apply data-testid to every button and interactive element.",
-    "DO NOT use completely transparent backgrounds for the sticky header; use bg-black/60 and backdrop-blur-xl."
+  "sections": [
+    {
+      "name": "Header",
+      "features": ["Logo", "Sticky CTA: 'Get Your Report'"]
+    },
+    {
+      "name": "Hero",
+      "features": ["Headline: 'Is AI Stealing Your Local Customers?'", "Subheadline: 'In 2026, standard SEO is dead. See exactly how AI Search Engines (ChatGPT, Google SGE) rank your business with the GEO Boost Engine.'", "Primary CTA: 'Get My $199 AI Visibility Report'", "Social Proof snippet: 'Trusted by 500+ local businesses.'"]
+    },
+    {
+      "name": "Problem Agitation",
+      "layout": "Bento Grid",
+      "features": ["Statistic: '68% of local searches now happen via AI Assistants.'", "Visual: Map with faded out pins (representing invisible businesses).", "Pain point: 'If AI doesn't know you, you don't exist.'"]
+    },
+    {
+      "name": "How It Works",
+      "features": ["Step 1: Deep AI Audit", "Step 2: Competitive Matrix", "Step 3: Actionable Domination Plan"]
+    },
+    {
+      "name": "Value Stack / Pricing",
+      "features": ["Card highlighting the $199 value", "List of deliverables: Keyword AI mapping, Sentiment Analysis, Competitor Gap Report", "Urgency: 'Only 50 reports generated per week.'"]
+    },
+    {
+      "name": "Social Proof & Guarantee",
+      "features": ["Testimonials with real faces", "100% Money-Back Guarantee badge (Risk Reversal)"]
+    },
+    {
+      "name": "Final CTA",
+      "features": ["Massive headline", "Primary CTA button"]
+    }
   ],
-  "universal_guidelines_for_main_agent": [
-    "Do not converge toward generic AI outputs. Make the frontend distinctive with the defined fonts, high contrast, and generous spacing.",
-    "Create depth through layered design elements with z-index hierarchy and glass-morphism (backdrop-blur 12-24px).",
-    "Do not apply 'transition: all'. Apply transitions specifically to transform, opacity, colors, box-shadow.",
-    "Do not center align the root .App container in CSS. This ruins left-aligned reading flow.",
-    "Use modern pill-shaped or rounded-full buttons for primary CTAs.",
-    "Never use AI assistant emoji characters for icons. Use lucide-react.",
-    "Every interaction needs a micro-animation (hover, active states). Static = dead.",
-    "Use 2-3x more spacing than feels comfortable (e.g., py-24 or py-32 for sections).",
-    "Always use the provided image URLs; never use placeholder text for images or logos."
+  "instructions_to_main_agent": [
+    "Use framer-motion for all scroll and entrance animations.",
+    "Implement Lucide-react for icons.",
+    "Ensure the hero CTA is always visible or easily accessible (sticky header).",
+    "Use raw HTML and Tailwind for layout structures. Do not use restrictive UI library wrappers for main sections.",
+    "Ensure contrast passes APCA standards. Do not put grey text on dark grey backgrounds if it fails contrast.",
+    "Add a subtle grain texture (`url('/noise.png')` or SVG filter) to the background to make the dark theme feel premium, not plastic."
+  ],
+  "universal_guidelines": [
+    "Do not converge toward generic, 'on distribution' outputs. Avoid the 'AI slop' aesthetic.",
+    "Create depth through layered design elements with z-index hierarchy.",
+    "Use glass-morphism effects with backdrop filters (12-24px blur) where appropriate, always with a subtle border.",
+    "You MUST NOT apply universal transition (e.g., `transition: all`).",
+    "You MUST NOT center align the app container in CSS.",
+    "Always use modern button styles like pill-shaped with interaction animations.",
+    "NEVER use emoji characters for icons.",
+    "Every interaction needs micro-animations - hover states, transitions.",
+    "Use 2-3x more spacing than feels comfortable.",
+    "All interactive and key informational elements MUST include a `data-testid` attribute.",
+    "Do not use complete `transparent` background in header or overlays. Ensure content under them is readable via blur or solid bg."
   ]
 }

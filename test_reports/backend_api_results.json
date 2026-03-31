@@ -1,0 +1,129 @@
+{
+  "test_run_timestamp": "2026-03-30T08:03:54.716809",
+  "base_url": "https://geo-boost-engine.preview.emergentagent.com",
+  "total_tests": 7,
+  "passed_tests": 7,
+  "success_rate": 100.0,
+  "test_results": [
+    {
+      "test_name": "API Root Version Info",
+      "method": "GET",
+      "endpoint": "api/",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_time": 0.194333,
+      "timestamp": "2026-03-30T08:03:54.033362",
+      "response_data": {
+        "message": "GEO Boost Engine API",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "test_name": "Create Free Lead",
+      "method": "POST",
+      "endpoint": "api/free-leads",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_time": 0.110313,
+      "timestamp": "2026-03-30T08:03:54.145115",
+      "response_data": {
+        "id": "3c7cde1f-ebb3-4554-9d56-3dbecee52de3",
+        "business_name": "Free Test Business 080354",
+        "email": "test@freebusiness.com",
+        "location": "Los Angeles, CA",
+        "report_sent": false,
+        "created_at": "2026-03-30T08:03:54.126733Z"
+      }
+    },
+    {
+      "test_name": "Create Business Lead",
+      "method": "POST",
+      "endpoint": "api/leads",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_time": 0.116695,
+      "timestamp": "2026-03-30T08:03:54.263271",
+      "response_data": {
+        "id": "9df2296b-790b-4436-9425-6dc4c87d21bc",
+        "business_name": "Test Business 080354",
+        "website": "https://testbusiness.com",
+        "location": "Phoenix, AZ",
+        "owner_name": "John Test",
+        "email": "john@testbusiness.com",
+        "phone": "(555) 123-4567",
+        "business_type": "HVAC & Heating",
+        "payment_status": "pending",
+        "payment_session_id": null,
+        "created_at": "2026-03-30T08:03:54.239973Z"
+      }
+    },
+    {
+      "test_name": "Get Lead by ID",
+      "method": "GET",
+      "endpoint": "api/leads/9df2296b-790b-4436-9425-6dc4c87d21bc",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_time": 0.101589,
+      "timestamp": "2026-03-30T08:03:54.366314",
+      "response_data": {
+        "id": "9df2296b-790b-4436-9425-6dc4c87d21bc",
+        "business_name": "Test Business 080354",
+        "website": "https://testbusiness.com",
+        "location": "Phoenix, AZ",
+        "owner_name": "John Test",
+        "email": "john@testbusiness.com",
+        "phone": "(555) 123-4567",
+        "business_type": "HVAC & Heating",
+        "payment_status": "pending",
+        "payment_session_id": null,
+        "created_at": "2026-03-30T08:03:54.239973Z"
+      }
+    },
+    {
+      "test_name": "Create Payment Session",
+      "method": "POST",
+      "endpoint": "api/payments/create-session",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_time": 0.143695,
+      "timestamp": "2026-03-30T08:03:54.511527",
+      "response_data": {
+        "checkout_url": "https://geo-boost-engine.preview.emergentagent.com/success?session_id=875a0c83-bbce-414a-a9b6-d6ee46eafb90&lead_id=9df2296b-790b-4436-9425-6dc4c87d21bc&demo=true",
+        "session_id": "875a0c83-bbce-414a-a9b6-d6ee46eafb90"
+      }
+    },
+    {
+      "test_name": "Confirm Payment",
+      "method": "POST",
+      "endpoint": "api/payments/confirm?lead_id=9df2296b-790b-4436-9425-6dc4c87d21bc&session_id=875a0c83-bbce-414a-a9b6-d6ee46eafb90",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_time": 0.106814,
+      "timestamp": "2026-03-30T08:03:54.619757",
+      "response_data": {
+        "status": "success",
+        "message": "Payment confirmed. Report delivery email sent.",
+        "lead_id": "9df2296b-790b-4436-9425-6dc4c87d21bc"
+      }
+    },
+    {
+      "test_name": "Track Analytics Event",
+      "method": "POST",
+      "endpoint": "api/track",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_time": 0.094959,
+      "timestamp": "2026-03-30T08:03:54.716096",
+      "response_data": {
+        "status": "tracked"
+      }
+    }
+  ]
+}
