@@ -95,34 +95,37 @@ const FreeReportForm = ({ onSuccess, onCancel }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" data-testid="free-report-form-modal">
-      <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl w-full max-w-md relative">
+      <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl w-full max-w-md relative pt-10">
         {/* CLOSE BUTTON */}
     <button 
       onClick={onCancel}
-      className="absolute top-4 right-4 z-50 w-10 h-10 flex items-center justify-center rounded-full bg-white text-black hover:bg-gray-200 shadow-lg"
+      className="absolute top-2 right-2 z-[9999] w-10 h-10 flex items-center justify-center rounded-full bg-white text-black hover:bg-gray-200 shadow-lg"
     >
       ✕
     </button>
-        {/* Header */}
-        <div className="bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 px-6 py-5 flex items-center justify-between rounded-t-2xl border-b border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center">
-              <Gift className="w-5 h-5 text-emerald-400" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-white">Get Your Free Snapshot</h2>
-              <p className="text-xs text-zinc-400">Quick AI visibility overview</p>
-            </div>
-          </div>
-          <button 
-            onClick={onCancel}
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-zinc-400 hover:text-white transition-colors"
-            data-testid="close-free-form-btn"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+       {/* Header */}
+<div className="bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 px-6 py-5 flex items-center justify-between rounded-t-2xl border-b border-white/10">
 
+  {/* LEFT SIDE */}
+  <div className="flex items-center gap-3">
+    <div className="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center">
+      <Gift className="w-5 h-5 text-emerald-400" />
+    </div>
+    <div>
+      <h2 className="text-white font-semibold">Free AI Visibility Report</h2>
+      <p className="text-sm text-zinc-400">Instant snapshot</p>
+    </div>
+  </div>
+
+  {/* RIGHT SIDE CLOSE BUTTON */}
+  <button 
+    onClick={onCancel}
+    className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-black hover:bg-gray-200 shadow-lg"
+  >
+    ✕
+  </button>
+
+</div>
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {/* Business Name */}
