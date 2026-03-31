@@ -97,7 +97,7 @@ const FreeReportForm = ({ onSuccess, onCancel }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" data-testid="free-report-form-modal">
       <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl w-full max-w-md relative pt-10">
 
-       {/* Header */}
+{/* Header */}
 <div className="bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 px-6 py-5 flex items-center justify-between rounded-t-2xl border-b border-white/10">
 
   {/* LEFT SIDE */}
