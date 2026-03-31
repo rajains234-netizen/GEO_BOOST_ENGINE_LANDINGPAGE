@@ -98,7 +98,7 @@ const FreeReportForm = ({ onSuccess, onCancel }) => {
       <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl w-full max-w-md relative pt-10">
 
 {/* Header */}
-<div className="bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 px-6 py-5 flex items-center justify-between rounded-t-2xl border-b border-white/10">
+<div className="relative bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 px-6 py-5 flex items-center justify-between rounded-t-2xl border-b border-white/10">
 
   {/* LEFT SIDE */}
   <div className="flex items-center gap-3">
@@ -111,10 +111,10 @@ const FreeReportForm = ({ onSuccess, onCancel }) => {
     </div>
   </div>
 
-  {/* RIGHT SIDE CLOSE BUTTON */}
+  {/* CLOSE BUTTON */}
   <button 
     onClick={onCancel}
-    className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-black hover:bg-gray-200 shadow-lg"
+    className="ml-4 w-10 h-10 flex items-center justify-center rounded-full bg-white text-black hover:bg-gray-200 shadow-lg shrink-0"
   >
     ✕
   </button>
