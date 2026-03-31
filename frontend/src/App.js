@@ -1150,7 +1150,9 @@ const Footer = () => {
   return (
     <footer className="py-8 border-t border-white/5" data-testid="footer">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        
+        {/* Top section */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center">
               <MapPin className="w-4 h-4 text-black" />
@@ -1159,10 +1161,24 @@ const Footer = () => {
               GEO Boost Engine
             </span>
           </div>
+
           <div className="text-sm text-zinc-500">
             © 2025 GEO Boost Engine. All rights reserved.
           </div>
         </div>
+
+        {/* 🔥 NEW: Legal links (CRITICAL for Paddle) */}
+        <div className="text-center text-sm text-zinc-400 flex flex-wrap justify-center gap-4">
+          <a href="/terms.html" className="hover:text-white">Terms</a>
+          <a href="/privacy.html" className="hover:text-white">Privacy</a>
+          <a href="/refund.html" className="hover:text-white">Refund</a>
+        </div>
+
+        {/* Optional trust line (helps conversion + approval) */}
+        <div className="text-center text-xs text-zinc-600 mt-3">
+          Secure payments powered by Paddle
+        </div>
+
       </div>
     </footer>
   );
