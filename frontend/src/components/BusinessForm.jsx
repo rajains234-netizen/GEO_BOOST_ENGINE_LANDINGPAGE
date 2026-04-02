@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ArrowRight, Building2, Globe, MapPin, User, Mail, Phone, Briefcase, Loader2, Check, X } from "lucide-react";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 
 const BusinessForm = ({ onSuccess, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -47,55 +47,43 @@ const BusinessForm = ({ onSuccess, onCancel }) => {
     setError(null);
 
     try {
-      // Create lead
-      const leadResponse = await fetch(`${BACKEND_URL}/api/leads`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
-      });
+// Submit to Web3Forms
+const response = await fetch("https://api.web3forms.com/submit", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    access_key: "d144a58c-919a-42a5-aced-0dc8a92fc3e9", // 🔥 replace this
+    business_name: formData.business_name,
+    website: formData.website,
+    location: formData.location,
+    owner_name: formData.owner_name,
+    email: formData.email,
+    phone: formData.phone,
+    business_type: formData.business_type
+  })
+});
 
-      if (!leadResponse.ok) {
-        throw new Error("Failed to submit business details");
-      }
+const result = await response.json();
 
-      const lead = await leadResponse.json();
-
-      // Create payment session
-      const paymentResponse = await fetch(`${BACKEND_URL}/api/payments/create-session`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          lead_id: lead.id,
-          success_url: `${window.location.origin}/success`,
-          cancel_url: `${window.location.origin}/?cancelled=true`
-        })
-      });
-
-      if (!paymentResponse.ok) {
-        throw new Error("Something went wrong. Please try again or contact support.");
-      }
-
-const { checkout_url } = await paymentResponse.json();
-
-      // ✅ ADD SAFETY CHECK HERE
-if (!checkout_url) {
-  throw new Error("Payment link not generated");
+if (!result.success) {
+  throw new Error("Failed to submit business details");
 }
 
 // Track conversion
 if (window.gtag) {
   window.gtag('event', 'begin_checkout', {
     currency: 'USD',
-    value: 199,
-    items: [{ item_name: 'AI Visibility Report', price: 199 }]
+    value: 199
   });
 }
 if (window.fbq) {
   window.fbq('track', 'InitiateCheckout', { value: 199, currency: 'USD' });
 }
 
-// ✅ THIS IS THE ONLY REDIRECT YOU NEED
-window.location.href = checkout_url;
+// Redirect to Dodo payment
+const redirectUrl = encodeURIComponent("https://citacy.com/success");
+
+window.location.href = `https://checkout.dodopayments.com/buy/pdt_0Nbpq9wUkTs7uNmcVtzrq?quantity=1&email=${formData.email}&redirect_url=${redirectUrl}`;
 
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
