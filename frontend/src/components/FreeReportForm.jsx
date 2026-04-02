@@ -219,11 +219,10 @@ const FreeReportForm = ({ onSuccess, onCancel }) => {
 
           {/* Submit Button */}
           <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            data-testid="submit-free-form-btn"
-          >
+    type="submit"
+    disabled={isSubmitting}
+    className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+  >
             {isSubmitting ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
