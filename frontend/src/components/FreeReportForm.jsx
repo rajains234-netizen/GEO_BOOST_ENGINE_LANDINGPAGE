@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ArrowRight, Mail, Building2, MapPin, Globe, Loader2, Check, Gift, X } from "lucide-react";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 
 const FreeReportForm = ({ onSuccess, onCancel }) => {
   const [formData, setFormData] = useState({
