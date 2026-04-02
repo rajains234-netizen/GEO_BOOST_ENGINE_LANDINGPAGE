@@ -72,25 +72,30 @@ const BusinessForm = ({ onSuccess, onCancel }) => {
       });
 
       if (!paymentResponse.ok) {
-        throw new Error("Failed to create payment session");
+        throw new Error("Something went wrong. Please try again or contact support.");
       }
 
-      const { checkout_url } = await paymentResponse.json();
+const { checkout_url } = await paymentResponse.json();
 
-      // Track conversion event
-      if (window.gtag) {
-        window.gtag('event', 'begin_checkout', {
-          currency: 'USD',
-          value: 199,
-          items: [{ item_name: 'AI Visibility Report', price: 199 }]
-        });
-      }
-      if (window.fbq) {
-        window.fbq('track', 'InitiateCheckout', { value: 199, currency: 'USD' });
-      }
+      // ✅ ADD SAFETY CHECK HERE
+if (!checkout_url) {
+  throw new Error("Payment link not generated");
+}
 
-      // Redirect to payment
-      window.location.href = checkout_url;
+// Track conversion
+if (window.gtag) {
+  window.gtag('event', 'begin_checkout', {
+    currency: 'USD',
+    value: 199,
+    items: [{ item_name: 'AI Visibility Report', price: 199 }]
+  });
+}
+if (window.fbq) {
+  window.fbq('track', 'InitiateCheckout', { value: 199, currency: 'USD' });
+}
+
+// ✅ THIS IS THE ONLY REDIRECT YOU NEED
+window.location.href = checkout_url;
 
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
