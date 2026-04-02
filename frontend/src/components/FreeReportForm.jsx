@@ -27,15 +27,25 @@ const FreeReportForm = ({ onSuccess, onCancel }) => {
 
     try {
       // Create free lead
-      const response = await fetch(`${BACKEND_URL}/api/free-leads`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
-      });
+      const response = await fetch("https://api.web3forms.com/submit", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    access_key: "YOUR_ACCESS_KEY",
+    business_name: formData.business_name,
+    email: formData.email,
+    website: formData.website,
+    location: formData.location
+  })
+});
 
-      if (!response.ok) {
-        throw new Error("Failed to submit. Please try again.");
-      }
+const result = await response.json();
+
+if (!result.success) {
+  throw new Error("Failed to submit.");
+}
 
       // Track conversion event
       if (window.gtag) {
