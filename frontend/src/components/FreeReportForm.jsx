@@ -32,13 +32,19 @@ const FreeReportForm = ({ onSuccess, onCancel }) => {
   headers: {
     "Content-Type": "application/json"
   },
-  body: JSON.stringify({
-    access_key: "YOUR_ACCESS_KEY",
-    business_name: formData.business_name,
-    email: formData.email,
-    website: formData.website,
-    location: formData.location
-  })
+body: JSON.stringify({
+  access_key: "d144a58c-919a-42a5-aced-0dc8a92fc3e9",
+
+  name: formData.business_name,
+  email: formData.email,
+  subject: "New Free Report Request",
+
+  message: `
+  Business: ${formData.business_name}
+  Website: ${formData.website}
+  Location: ${formData.location}
+  `
+})
 });
 
 const result = await response.json();
