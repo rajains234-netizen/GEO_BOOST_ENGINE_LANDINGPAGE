@@ -1,27 +1,18 @@
-name: Deploy to EC2
+script: |
+  cd /var/www
 
-on:
-  push:
-    branches:
-      - main
+  if [ ! -d "html" ]; then
+    git clone https://github.com/rajains234-netizen/GEO_BOOST_ENGINE_LANDINGPAGE.git html
+  fi
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  cd html
+  git pull origin main
 
-    steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: 54.221.34.162
-          username: ubuntu
-          key: ${{ secrets.EC2_KEY }}
-          port: 22 
-          script: |
-            cd /var/www/html
-            git pull origin main
-            cd frontend
-            npm install --legacy-peer-deps --force
-            npm run build
-            cp -r build/* /var/www/html/
-            sudo systemctl restart nginx
+  cd frontend
+  npm install --legacy-peer-deps --force
+  npm run build
+
+  sudo rm -rf /var/www/html/*
+  sudo cp -r build/* /var/www/html/
+
+  sudo systemctl restart nginx
