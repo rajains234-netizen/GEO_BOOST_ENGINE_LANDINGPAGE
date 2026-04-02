@@ -93,10 +93,12 @@ if (!result.success) {
           </div>
           <h2 className="text-2xl font-bold text-white mb-3">Check Your Email!</h2>
           <p className="text-zinc-400 mb-6">
-            Your free AI visibility snapshot is on its way to <span className="text-white font-medium">{formData.email}</span>
-          </p>
-          <p className="text-sm text-zinc-500 mb-6">
-            It may take a few minutes to arrive. Check your spam folder if you don't see it.
+✅ Your Free AI Visibility Report is Being Generated
+
+📩 We’re analyzing your business now.
+You’ll receive your report within 5–10 minutes.
+
+⚠️ Make sure to check spam/promotions.
           </p>
           <button
             onClick={onCancel}
