@@ -1,0 +1,26 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 54.221.34.162
+          username: ubuntu
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd /var/www/html
+            git pull origin main
+            cd frontend
+            npm install --legacy-peer-deps --force
+            npm run build
+            cp -r build/* /var/www/html/
+            sudo systemctl restart nginx
