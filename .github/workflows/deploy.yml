@@ -11,31 +11,19 @@ jobs:
 
     steps:
       - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_KEY }}
           port: 22
-
           script: |
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
             cd /var/www
-
-            if [ ! -d "html" ]; then
-              git clone https://github.com/rajains234-netizen/GEO_BOOST_ENGINE_LANDINGPAGE.git html
-            fi
-
-            cd html
-            git pull origin main
-
-            cd frontend
+            sudo rm -rf html
+            git clone https://github.com/rajains234-netizen/GEO_BOOST_ENGINE_LANDINGPAGE.git html
+            cd html/frontend
             npm install --legacy-peer-deps --force
             npm run build
-
             sudo rm -rf /var/www/html/*
             sudo cp -r build/* /var/www/html/
-
             sudo systemctl restart nginx
