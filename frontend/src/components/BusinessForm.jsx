@@ -47,6 +47,14 @@ const BusinessForm = ({ onSuccess, onCancel }) => {
     setError(null);
 
     try {
+      if (!website) {
+    throw new Error("Website is required");
+  }
+
+  // Auto-fix missing https
+  if (!website.startsWith("http")) {
+    website = "https://" + website;
+  }
 // Submit to Web3Forms
 const response = await fetch("https://api.web3forms.com/submit", {
   method: "POST",
@@ -139,7 +147,7 @@ window.location.href = `https://checkout.dodopayments.com/buy/pdt_0Nbpq9wUkTs7uN
               Website *
             </label>
             <input
-              type="url"
+              type="text"
               name="website"
               value={formData.website}
               onChange={handleChange}
