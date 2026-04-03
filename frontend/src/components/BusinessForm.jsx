@@ -47,6 +47,7 @@ const BusinessForm = ({ onSuccess, onCancel }) => {
     setError(null);
 
     try {
+      let website = formData.website?.trim();
       if (!website) {
     throw new Error("Website is required");
   }
@@ -62,7 +63,7 @@ const response = await fetch("https://api.web3forms.com/submit", {
   body: JSON.stringify({
     access_key: "d144a58c-919a-42a5-aced-0dc8a92fc3e9", // 🔥 replace this
     business_name: formData.business_name,
-    website: formData.website,
+    website: website,
     location: formData.location,
     owner_name: formData.owner_name,
     email: formData.email,
@@ -152,7 +153,7 @@ window.location.href = `https://checkout.dodopayments.com/buy/pdt_0Nbpq9wUkTs7uN
               value={formData.website}
               onChange={handleChange}
               required
-              placeholder="https://yourwebsite.com"
+              placeholder="example.com or https://example.com"
               className={inputClasses}
               data-testid="input-website"
             />
