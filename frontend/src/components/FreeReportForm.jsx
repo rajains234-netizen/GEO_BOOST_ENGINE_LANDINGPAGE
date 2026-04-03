@@ -26,6 +26,19 @@ const FreeReportForm = ({ onSuccess, onCancel }) => {
     setError(null);
 
     try {
+      let website = formData.website?.trim();
+
+if (!website) {
+  throw new Error("Website is required");
+}
+
+// Auto-fix missing https
+if (!website.startsWith("http")) {
+  website = "https://" + website;
+}
+
+// remove accidental spaces
+website = website.replace(/\s/g, "");
       // Create free lead
       const response = await fetch("https://api.web3forms.com/submit", {
   method: "POST",
@@ -41,7 +54,7 @@ body: JSON.stringify({
 
   message: `
   Business: ${formData.business_name}
-  Website: ${formData.website}
+  Website: ${website}
   Location: ${formData.location}
   `
 })
@@ -165,12 +178,12 @@ You’ll receive your report within 5–10 minutes.
               Website *
             </label>
             <input
-              type="url"
+              type="text"
               name="website"
               value={formData.website}
               onChange={handleChange}
               required
-              placeholder="https://yourwebsite.com"
+              placeholder="example.com or https://example.com"
               className={inputClasses}
               data-testid="free-input-website"
             />
