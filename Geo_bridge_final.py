@@ -28,6 +28,7 @@ SCRIPTS_DIR = os.path.join(BASE_DIR, "scripts")
 
 # Paths for logic files
 GEO_BOOST_SKILL_PATH = os.path.join(SKILLS_DIR, "geo_boost_engine.skill.md")
+with open(os.path.join(SKILLS_DIR, "geo_report.skill.md"), 'r', encoding='utf-8') as f: schema = f.read()
 HTML_SKILL_PATH = os.path.join(SKILLS_DIR, "geo_html_schema.skill.md")
 
 # Generator Script Paths
