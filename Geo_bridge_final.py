@@ -33,7 +33,7 @@ HTML_SKILL_PATH = os.path.join(SKILLS_DIR, "geo_html_schema.skill.md")
 
 # Generator Script Paths
 FULL_REPORT_EXE = os.path.join(SCRIPTS_DIR, "generate_html_report.py")
-TEASER_REPORT_EXE = os.path.join(SCRIPTS_DIR, "generate_teaser_report.py")
+TEASER_REPORT_EXE = os.path.join(SCRIPTS_DIR, "generate_html_report.py")
 
 # Output directory (Ensure this exists or use /tmp on cloud providers)
 OUTPUT_PATH = os.path.join(BASE_DIR, "output")
