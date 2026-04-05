@@ -186,7 +186,6 @@ def handle_form():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 if __name__ == '__main__':
-    print("🚦 GEO Bridge Server Active on http://127.0.0.1:5000")
-    if __name__ == '__main__':
-    # host='0.0.0.0' is required for EC2 to accept outside traffic
+    print("🚦 GEO Bridge Server Active on http://0.0.0.0:5000")
+    # host='0.0.0.0' tells AWS to allow outside traffic
     app.run(host='0.0.0.0', port=5000, debug=True)
