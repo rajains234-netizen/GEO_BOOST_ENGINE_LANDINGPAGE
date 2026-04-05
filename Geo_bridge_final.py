@@ -30,14 +30,13 @@ app = Flask(__name__)
 # --- 1. CLOUD CONFIGURATION ---
 GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
 OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")
-MODEL = os.getenv("OPENROUTER_MODEL", "qwen/qwen3.6-plus:free")
+
+# openrouter/free auto-selects from all available free models and handles rate limits
+MODEL = os.getenv("OPENROUTER_MODEL", "openrouter/free")
 FALLBACK_MODELS = [
+    "openrouter/free",
     "qwen/qwen3.6-plus:free",
-    "nvidia/nemotron-3-super-120b-a12b:free",
     "meta-llama/llama-3.3-70b-instruct:free",
-    "qwen/qwen3-coder:free",
-    "google/gemma-3-27b-it:free",
-    "openai/gpt-oss-120b:free",
 ]
 
 EMAIL_USER = os.getenv("EMAIL_USER")
