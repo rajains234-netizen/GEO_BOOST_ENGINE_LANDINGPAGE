@@ -63,7 +63,6 @@ if not os.path.exists(OUTPUT_PATH):
 
 
 
-
 def get_verified_business_data(biz_name, location, category):
     """Fetches real-time business stats and competitor data via Google Maps API."""
     try:
@@ -123,7 +122,7 @@ def call_openrouter(prompt, timeout=300):
                 resp = requests.post("https://openrouter.ai/api/v1/chat/completions",
                     headers={"Authorization": f"Bearer {OPENROUTER_KEY}"},
                     json={"model": model, "messages": [
-                        {"role": "system", "content": SYSTEM_PROMPT},
+                        
                         {"role": "user", "content": prompt}
                     ], "temperature": 0},
                     timeout=timeout)
