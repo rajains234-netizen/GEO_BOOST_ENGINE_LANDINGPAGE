@@ -999,4 +999,3 @@ if __name__ == "__main__":
     file_size = os.path.getsize(output_file)
     print(f"HTML report generated: {output_file}")
     print(f"File size: {file_size:,} bytes ({file_size/1024:.1f} KB)")
- i am attaching the script that needs to fixed above , the analysis date is showing may 20, 2024 ... update the script above i attached and fix it  ..  dont change anything else
