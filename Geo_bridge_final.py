@@ -21,6 +21,14 @@ load_dotenv(dotenv_path=env_path)
 # --- ADD THIS TEMPORARY DEBUG LINE TO BE SURE ---
 print(f"DEBUG: OpenRouter Key found: {os.getenv('OPENROUTER_KEY') is not None}")
 
+# Define where the generated reports will be stored temporarily
+DOWNLOADS_PATH = Path(__file__).parent / "downloads"
+
+# Automatically create the folder if it doesn't exist
+DOWNLOADS_PATH.mkdir(parents=True, exist_ok=True)
+
+print(f"DEBUG: Downloads path set to: {DOWNLOADS_PATH}")
+
 app = Flask(__name__)
 # --- 1. CLOUD CONFIGURATION ---
 # Secrets are now loaded from Environment Variables
