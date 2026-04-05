@@ -61,6 +61,25 @@ OUTPUT_PATH = os.path.join(BASE_DIR, "output")
 if not os.path.exists(OUTPUT_PATH):
     os.makedirs(OUTPUT_PATH)
 
+# --- 2. SYSTEM PROMPT ---
+SYSTEM_PROMPT = """
+You are the GEO Boost Intelligence Engine. Your goal is to generate a full visibility and revenue intelligence report in RAW JSON format.
+
+STRICT EXECUTION MODE:
+1. Follow every component defined in the provided skill files step-by-step.
+2. Do NOT skip any section (1-14).
+3. Do NOT change section order.
+4. Explicitly label all assumptions (search volume, conversion rate, ticket size, etc.).
+5. Use realistic ranges, not exact numbers.
+6. If data is missing, proceed with industry-based assumptions and label them clearly.
+7. Keep tone sharp, direct, consultative, and revenue-focused.
+
+OUTPUT REQUIREMENTS:
+- OUTPUT ONLY RAW JSON.
+- NO Markdown blocks (no ```json).
+- NO introductory or concluding text.
+- Match the provided Schema exactly.
+"""
 
 
 def get_verified_business_data(biz_name, location, category):
@@ -122,7 +141,7 @@ def call_openrouter(prompt, timeout=300):
                 resp = requests.post("https://openrouter.ai/api/v1/chat/completions",
                     headers={"Authorization": f"Bearer {OPENROUTER_KEY}"},
                     json={"model": model, "messages": [
-                        
+                        {"role": "system", "content": SYSTEM_PROMPT},
                         {"role": "user", "content": prompt}
                     ], "temperature": 0},
                     timeout=timeout)
