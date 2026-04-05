@@ -36,12 +36,7 @@ GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
 OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")
 
 # openrouter/free auto-selects from all available free models and handles rate limits
-MODEL = os.getenv("OPENROUTER_MODEL", "openrouter/free")
-FALLBACK_MODELS = [
-    "openrouter/free",
-    "qwen/qwen3.6-plus:free",
-    "meta-llama/llama-3.3-70b-instruct:free",
-]
+MODEL = "openrouter/free"
 
 EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_PASS = os.getenv("EMAIL_PASS")
@@ -117,7 +112,6 @@ def handle_form():
     biz_name = data.get('business_name', "Lead")
     location = data.get('location', "Memphis TN")
     category = data.get('category', "service")
-    website = data.get('website', "")
     is_paid = data.get('is_paid', False)
     client_email = data.get('email', "rajatab234@gmail.com")
     
@@ -130,94 +124,51 @@ def handle_form():
     with open(HTML_SKILL_PATH, 'r', encoding='utf-8') as f: schema = f.read()
 
     # 3. Construct AI Request
-    prompt = f"""Output ONLY RAW JSON. Full GEO Boost analysis for:
-    Business Name: {biz_name}
-    Website: {website}
-    Location: {location}
-    Category: {category}
-    Service Intent: best {category} in {location}
-    Current Google Stats: {stats['reviews']} reviews, {stats['rating']} star rating
-    Top Competitors Found:
-    {competitors}
-    
-    Analysis Logic & Scoring Rules:
-    {logic}
-    
-    Required Output JSON Schema:
-    {schema}"""
+    prompt = f"""Output ONLY RAW JSON. Analysis for {biz_name}. 
+    Current Stats: {stats['reviews']} reviews, {stats['rating']} stars. 
+    Competitors: {competitors}. 
+    Analysis Logic: {logic}
+    Output Schema: {schema}"""
 
     try:
-        text = ""
-        # 4. Request Analysis from OpenRouter (with retry + fallback)
-        ai_data, used_model, ai_err = call_openrouter(prompt)
+        # 4. Request Analysis from OpenRouter
+        response = requests.post("https://openrouter.ai/api/v1/chat/completions",
+            headers={"Authorization": f"Bearer {OPENROUTER_KEY}"},
+            json={"model": MODEL, "messages": [{"role": "user", "content": prompt}], "temperature": 0})
+        ai_data = response.json()
 
-        if ai_data is None:
-            print(f"❌ All models failed. Last error: {ai_err}")
-            return jsonify({"status": "error", "message": "All AI models failed to respond", "ai_error": ai_err}), 500
+        if 'choices' not in ai_data:
+            print(f"❌ AI Error Details: {json.dumps(ai_data, indent=2)}")
+            return jsonify({"status": "error", "message": "AI Engine failed to respond"}), 500
 
         text = ai_data['choices'][0]['message']['content'].strip()
-        print(f"📝 Got {len(text)} chars from {used_model}")
         
-        # Strip <think>...</think> reasoning blocks (Qwen3 models)
-        text = re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL).strip()
-
-        # Robust JSON cleaning
+        # Robust JSON cleaning to prevent generator crashes
         if "```json" in text:
             text = text.split("```json")[1].split("```")[0].strip()
         elif "```" in text:
             text = text.split("```")[1].split("```")[0].strip()
-        
-        # Last resort: extract first { to last }
-        if not text.startswith("{"):
-            start = text.find("{")
-            if start != -1:
-                text = text[start:]
 
         # 5. Process and Render Report
-        # raw_decode stops at the end of the first valid JSON object
-        # (ignores any trailing text the AI appended after the JSON)
-        decoder = json.JSONDecoder()
-        report_data, _ = decoder.raw_decode(text)
-        
-        # Normalize AI output to the flat format the HTML generator expects
-        report_data = normalize_report_data(report_data)
-        print(f"📊 Normalized. Keys: {len(report_data)}")
-        
-        # Force-inject metadata from webhook (AI may miss or hallucinate these)
-        report_data["brand_name"] = biz_name
-        report_data["url"] = website
-        report_data["location"] = location
-        report_data["category"] = category
-        report_data["service_intent"] = f"best {category} in {location}"
+        # Parse AI JSON and inject the is_paid flag so the HTML generator knows
+        report_data = json.loads(text)
         report_data["is_paid"] = is_paid
         report_data["date"] = datetime.now().strftime("%Y-%m-%d")
-
-        # Debug: log which keys the AI actually populated
-        scored_keys = ["visibility_score", "trust_score", "ai_status", "revenue_range",
-                       "executive_summary", "reality_check", "score_breakdown"]
-        for k in scored_keys:
-            val = report_data.get(k)
-            status = "✅" if val and val != 0 else "⚠️ MISSING/ZERO"
-            print(f"  {status} {k}: {str(val)[:80]}")
 
         temp_json = os.path.join(DOWNLOADS_PATH, "temp_analysis.json")
         with open(temp_json, "w", encoding='utf-8') as f:
             json.dump(report_data, f, ensure_ascii=False, indent=2)
         
-        # Save raw AI response for debugging
-        debug_file = os.path.join(DOWNLOADS_PATH, "debug_raw_ai_response.txt")
-        with open(debug_file, "w", encoding='utf-8') as f:
-            f.write(f"Model: {used_model}\nTimestamp: {datetime.now()}\nChars: {len(text)}\n\n{text}")
-        
         script = FULL_REPORT_EXE if is_paid else TEASER_REPORT_EXE
         prefix = "FULL_" if is_paid else "FREE_Teaser_"
         out_html = os.path.join(DOWNLOADS_PATH, f"{prefix}Report_{biz_name.replace(' ', '_')}.html")
         
+        # Execute generator with UTF-8 environment enforcement
         env = os.environ.copy()
         env["PYTHONIOENCODING"] = "utf-8"
         
         print(f"🎨 Rendering {prefix} report...")
-        result = subprocess.run(["python3", script, temp_json, out_html], capture_output=True, text=True, env=env)
+        result = subprocess.run(["python", script, temp_json, out_html], capture_output=True, text=True, env=env)
         
         if result.returncode != 0:
             print(f"❌ GENERATOR ERROR: {result.stderr}")
@@ -229,13 +180,8 @@ def handle_form():
             
         return jsonify({"status": "success", "message": "Report delivered successfully"})
         
-    except json.JSONDecodeError as e:
-        print(f"❌ JSON PARSE ERROR: {e}\nRaw AI text: {text[:500]}")
-        return jsonify({"status": "error", "message": f"AI returned invalid JSON: {str(e)}", "raw_preview": text[:300]}), 500
     except Exception as e:
-        import traceback
-        tb = traceback.format_exc()
-        print(f"❌ SYSTEM CRASH: {tb}")
+        print(f"❌ SYSTEM CRASH: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
 
 if __name__ == '__main__':
