@@ -10,6 +10,14 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
+import os
+from dotenv import load_dotenv
+
+# This is the magic line that actually reads your .env file
+load_dotenv()
+
+# --- ADD THIS TEMPORARY DEBUG LINE TO BE SURE ---
+print(f"DEBUG: OpenRouter Key found: {os.getenv('OPENROUTER_KEY') is not None}")
 
 app = Flask(__name__)
 # --- 1. CLOUD CONFIGURATION ---
