@@ -33,9 +33,11 @@ OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")
 MODEL = os.getenv("OPENROUTER_MODEL", "qwen/qwen3.6-plus:free")
 FALLBACK_MODELS = [
     "qwen/qwen3.6-plus:free",
+    "nvidia/nemotron-3-super-120b-a12b:free",
     "meta-llama/llama-3.3-70b-instruct:free",
-    "openai/gpt-oss-120b:free",
+    "qwen/qwen3-coder:free",
     "google/gemma-3-27b-it:free",
+    "openai/gpt-oss-120b:free",
 ]
 
 EMAIL_USER = os.getenv("EMAIL_USER")
@@ -124,7 +126,8 @@ def send_email(to_email, file_path, biz_name, is_paid):
     print(f"✅ {type_label} Email sent successfully to {to_email}")
 
 def call_openrouter(prompt, timeout=300):
-    """Call OpenRouter with retry across fallback models."""
+    """Call OpenRouter with retry across fallback models. Validates JSON response."""
+    import time
     models_to_try = [MODEL] + [m for m in FALLBACK_MODELS if m != MODEL]
     last_error = None
 
@@ -143,14 +146,32 @@ def call_openrouter(prompt, timeout=300):
                 print(f"📡 HTTP {resp.status_code} from {model}")
                 data = resp.json()
 
+                # Rate limited — wait and retry
+                if resp.status_code == 429:
+                    wait = 10 * (attempt + 1)
+                    print(f"⏳ Rate limited on {model}, waiting {wait}s...")
+                    time.sleep(wait)
+                    continue
+
                 if 'choices' in data and data['choices'][0].get('message', {}).get('content'):
-                    print(f"✅ Got response from {model}")
+                    content = data['choices'][0]['message']['content'].strip()
+                    
+                    # Strip <think> tags before checking
+                    clean = re.sub(r'<think>.*?</think>', '', content, flags=re.DOTALL).strip()
+                    
+                    # Validate response contains JSON (must have { somewhere)
+                    if '{' not in clean:
+                        print(f"⚠️ {model} returned text, not JSON. Preview: {clean[:200]}")
+                        last_error = {"error": f"{model} returned non-JSON text"}
+                        break  # this model won't produce JSON, try next
+                    
+                    print(f"✅ Got JSON response from {model}")
                     return data, model, None
 
-                # Model returned but no valid choices — log and try next
+                # Model returned but no valid choices
                 last_error = data
                 print(f"⚠️ No choices from {model}: {json.dumps(data, indent=2)[:300]}")
-                break  # don't retry same model if it responded but gave no choices
+                break
 
             except requests.exceptions.Timeout:
                 print(f"⏱️ Timeout ({timeout}s) on {model}, attempt {attempt+1}")
@@ -158,7 +179,7 @@ def call_openrouter(prompt, timeout=300):
             except requests.exceptions.RequestException as e:
                 print(f"🌐 Network error on {model}: {e}")
                 last_error = {"error": str(e)}
-                break  # network issue won't fix with retry
+                break
 
     return None, None, last_error
 
