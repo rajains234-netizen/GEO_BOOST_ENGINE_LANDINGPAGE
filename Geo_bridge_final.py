@@ -29,7 +29,13 @@ app = Flask(__name__)
 # --- 1. CLOUD CONFIGURATION ---
 GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
 OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")
-MODEL = "qwen/qwen3.6-plus:free"
+MODEL = os.getenv("OPENROUTER_MODEL", "qwen/qwen3-235b-a22b:free")
+FALLBACK_MODELS = [
+    "qwen/qwen3-235b-a22b:free",
+    "qwen/qwen3-30b-a3b:free",
+    "deepseek/deepseek-chat-v3-0324:free",
+    "meta-llama/llama-4-maverick:free",
+]
 
 EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_PASS = os.getenv("EMAIL_PASS")
@@ -116,6 +122,46 @@ def send_email(to_email, file_path, biz_name, is_paid):
         server.send_message(msg)
     print(f"✅ {type_label} Email sent successfully to {to_email}")
 
+def call_openrouter(prompt, timeout=300):
+    """Call OpenRouter with retry across fallback models."""
+    models_to_try = [MODEL] + [m for m in FALLBACK_MODELS if m != MODEL]
+    last_error = None
+
+    for model in models_to_try:
+        for attempt in range(2):  # 2 attempts per model
+            try:
+                print(f"🤖 Attempt {attempt+1} with model: {model}")
+                resp = requests.post("https://openrouter.ai/api/v1/chat/completions",
+                    headers={"Authorization": f"Bearer {OPENROUTER_KEY}"},
+                    json={"model": model, "messages": [
+                        {"role": "system", "content": SYSTEM_PROMPT},
+                        {"role": "user", "content": prompt}
+                    ], "temperature": 0},
+                    timeout=timeout)
+
+                print(f"📡 HTTP {resp.status_code} from {model}")
+                data = resp.json()
+
+                if 'choices' in data and data['choices'][0].get('message', {}).get('content'):
+                    print(f"✅ Got response from {model}")
+                    return data, model, None
+
+                # Model returned but no valid choices — log and try next
+                last_error = data
+                print(f"⚠️ No choices from {model}: {json.dumps(data, indent=2)[:300]}")
+                break  # don't retry same model if it responded but gave no choices
+
+            except requests.exceptions.Timeout:
+                print(f"⏱️ Timeout ({timeout}s) on {model}, attempt {attempt+1}")
+                last_error = {"error": f"Timeout after {timeout}s"}
+            except requests.exceptions.RequestException as e:
+                print(f"🌐 Network error on {model}: {e}")
+                last_error = {"error": str(e)}
+                break  # network issue won't fix with retry
+
+    return None, None, last_error
+
+
 @app.route('/webhook', methods=['POST'])
 def handle_form():
     data = request.json
@@ -142,25 +188,15 @@ def handle_form():
 
     try:
         text = ""
-        # 4. Request Analysis from OpenRouter
-        print(f"🤖 Calling OpenRouter ({MODEL})...")
-        response = requests.post("https://openrouter.ai/api/v1/chat/completions",
-            headers={"Authorization": f"Bearer {OPENROUTER_KEY}"},
-            json={"model": MODEL, "messages": [
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": prompt}
-            ], "temperature": 0},
-            timeout=120)
-        
-        print(f"📡 OpenRouter HTTP status: {response.status_code}")
-        ai_data = response.json()
+        # 4. Request Analysis from OpenRouter (with retry + fallback)
+        ai_data, used_model, ai_err = call_openrouter(prompt)
 
-        if 'choices' not in ai_data:
-            error_detail = json.dumps(ai_data, indent=2)
-            print(f"❌ AI Error Details: {error_detail}")
-            return jsonify({"status": "error", "message": "AI Engine failed to respond", "ai_error": ai_data}), 500
+        if ai_data is None:
+            print(f"❌ All models failed. Last error: {ai_err}")
+            return jsonify({"status": "error", "message": "All AI models failed to respond", "ai_error": ai_err}), 500
 
         text = ai_data['choices'][0]['message']['content'].strip()
+        print(f"📝 Got {len(text)} chars from {used_model}")
         
         # Robust JSON cleaning
         if "```json" in text:
@@ -197,9 +233,6 @@ def handle_form():
             
         return jsonify({"status": "success", "message": "Report delivered successfully"})
         
-    except requests.exceptions.Timeout:
-        print("❌ OpenRouter request timed out (120s)")
-        return jsonify({"status": "error", "message": "AI request timed out after 120 seconds"}), 504
     except json.JSONDecodeError as e:
         print(f"❌ JSON PARSE ERROR: {e}\nRaw AI text: {text[:500]}")
         return jsonify({"status": "error", "message": f"AI returned invalid JSON: {str(e)}", "raw_preview": text[:300]}), 500
