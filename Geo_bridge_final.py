@@ -36,7 +36,7 @@ GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
 OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")
 
 # openrouter/free auto-selects from all available free models and handles rate limits
-MODEL = "openrouter/free"
+MODEL = "qwen/qwen3.6-plus:free"
 
 EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_PASS = os.getenv("EMAIL_PASS")
