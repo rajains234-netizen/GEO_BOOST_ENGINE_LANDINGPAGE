@@ -242,12 +242,14 @@ def handle_form():
         # Last resort: extract first { to last }
         if not text.startswith("{"):
             start = text.find("{")
-            end = text.rfind("}") + 1
-            if start != -1 and end > start:
-                text = text[start:end]
+            if start != -1:
+                text = text[start:]
 
         # 5. Process and Render Report
-        report_data = json.loads(text)
+        # raw_decode stops at the end of the first valid JSON object
+        # (ignores any trailing text the AI appended after the JSON)
+        decoder = json.JSONDecoder()
+        report_data, _ = decoder.raw_decode(text)
         
         # Force-inject metadata from webhook (AI may miss or hallucinate these)
         report_data["brand_name"] = biz_name
