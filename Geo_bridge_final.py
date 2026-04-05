@@ -169,6 +169,7 @@ def handle_form():
     biz_name = data.get('business_name', "Lead")
     location = data.get('location', "Memphis TN")
     category = data.get('category', "service")
+    website = data.get('website', "")
     is_paid = data.get('is_paid', False)
     client_email = data.get('email', "rajatab234@gmail.com")
     
@@ -181,11 +182,21 @@ def handle_form():
     with open(HTML_SKILL_PATH, 'r', encoding='utf-8') as f: schema = f.read()
 
     # 3. Construct AI Request
-    prompt = f"""Output ONLY RAW JSON. Analysis for {biz_name}. 
-    Current Stats: {stats['reviews']} reviews, {stats['rating']} stars. 
-    Competitors: {competitors}. 
-    Analysis Logic: {logic}
-    Output Schema: {schema}"""
+    prompt = f"""Output ONLY RAW JSON. Full GEO Boost analysis for:
+    Business Name: {biz_name}
+    Website: {website}
+    Location: {location}
+    Category: {category}
+    Service Intent: best {category} in {location}
+    Current Google Stats: {stats['reviews']} reviews, {stats['rating']} star rating
+    Top Competitors Found:
+    {competitors}
+    
+    Analysis Logic & Scoring Rules:
+    {logic}
+    
+    Required Output JSON Schema:
+    {schema}"""
 
     try:
         text = ""
@@ -217,12 +228,32 @@ def handle_form():
 
         # 5. Process and Render Report
         report_data = json.loads(text)
+        
+        # Force-inject metadata from webhook (AI may miss or hallucinate these)
+        report_data["brand_name"] = biz_name
+        report_data["url"] = website
+        report_data["location"] = location
+        report_data["category"] = category
+        report_data["service_intent"] = f"best {category} in {location}"
         report_data["is_paid"] = is_paid
         report_data["date"] = datetime.now().strftime("%Y-%m-%d")
+
+        # Debug: log which keys the AI actually populated
+        scored_keys = ["visibility_score", "trust_score", "ai_status", "revenue_range",
+                       "executive_summary", "reality_check", "score_breakdown"]
+        for k in scored_keys:
+            val = report_data.get(k)
+            status = "✅" if val and val != 0 else "⚠️ MISSING/ZERO"
+            print(f"  {status} {k}: {str(val)[:80]}")
 
         temp_json = os.path.join(DOWNLOADS_PATH, "temp_analysis.json")
         with open(temp_json, "w", encoding='utf-8') as f:
             json.dump(report_data, f, ensure_ascii=False, indent=2)
+        
+        # Save raw AI response for debugging
+        debug_file = os.path.join(DOWNLOADS_PATH, "debug_raw_ai_response.txt")
+        with open(debug_file, "w", encoding='utf-8') as f:
+            f.write(f"Model: {used_model}\nTimestamp: {datetime.now()}\nChars: {len(text)}\n\n{text}")
         
         script = FULL_REPORT_EXE if is_paid else TEASER_REPORT_EXE
         prefix = "FULL_" if is_paid else "FREE_Teaser_"
