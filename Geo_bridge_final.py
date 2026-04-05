@@ -14,7 +14,9 @@ import os
 from dotenv import load_dotenv
 
 # This is the magic line that actually reads your .env file
-load_dotenv()
+from pathlib import Path
+env_path = Path(__file__).parent / '.env'
+load_dotenv(dotenv_path=env_path)
 
 # --- ADD THIS TEMPORARY DEBUG LINE TO BE SURE ---
 print(f"DEBUG: OpenRouter Key found: {os.getenv('OPENROUTER_KEY') is not None}")
