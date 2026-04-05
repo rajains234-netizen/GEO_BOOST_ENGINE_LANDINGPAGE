@@ -12,6 +12,7 @@ from email.mime.base import MIMEBase
 from email import encoders
 from dotenv import load_dotenv
 from pathlib import Path
+import re
 
 # Load .env from same directory as this script
 env_path = Path(__file__).parent / '.env'
@@ -29,12 +30,12 @@ app = Flask(__name__)
 # --- 1. CLOUD CONFIGURATION ---
 GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
 OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")
-MODEL = os.getenv("OPENROUTER_MODEL", "qwen/qwen3-235b-a22b:free")
+MODEL = os.getenv("OPENROUTER_MODEL", "qwen/qwen3.6-plus:free")
 FALLBACK_MODELS = [
-    "qwen/qwen3-235b-a22b:free",
-    "qwen/qwen3-30b-a3b:free",
-    "deepseek/deepseek-chat-v3-0324:free",
-    "meta-llama/llama-4-maverick:free",
+    "qwen/qwen3.6-plus:free",
+    "meta-llama/llama-3.3-70b-instruct:free",
+    "openai/gpt-oss-120b:free",
+    "google/gemma-3-27b-it:free",
 ]
 
 EMAIL_USER = os.getenv("EMAIL_USER")
@@ -198,11 +199,21 @@ def handle_form():
         text = ai_data['choices'][0]['message']['content'].strip()
         print(f"📝 Got {len(text)} chars from {used_model}")
         
+        # Strip <think>...</think> reasoning blocks (Qwen3 models)
+        text = re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL).strip()
+
         # Robust JSON cleaning
         if "```json" in text:
             text = text.split("```json")[1].split("```")[0].strip()
         elif "```" in text:
             text = text.split("```")[1].split("```")[0].strip()
+        
+        # Last resort: extract first { to last }
+        if not text.startswith("{"):
+            start = text.find("{")
+            end = text.rfind("}") + 1
+            if start != -1 and end > start:
+                text = text[start:end]
 
         # 5. Process and Render Report
         report_data = json.loads(text)
