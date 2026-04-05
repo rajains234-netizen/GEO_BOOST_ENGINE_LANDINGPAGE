@@ -187,4 +187,6 @@ def handle_form():
 
 if __name__ == '__main__':
     print("🚦 GEO Bridge Server Active on http://127.0.0.1:5000")
-    app.run(port=5000, debug=True)
+    if __name__ == '__main__':
+    # host='0.0.0.0' is required for EC2 to accept outside traffic
+    app.run(host='0.0.0.0', port=5000, debug=True)
