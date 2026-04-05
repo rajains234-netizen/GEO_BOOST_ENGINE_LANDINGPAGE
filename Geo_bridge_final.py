@@ -10,28 +10,23 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
-import os
 from dotenv import load_dotenv
-
-# This is the magic line that actually reads your .env file
 from pathlib import Path
+
+# Load .env from same directory as this script
 env_path = Path(__file__).parent / '.env'
 load_dotenv(dotenv_path=env_path)
 
-# --- ADD THIS TEMPORARY DEBUG LINE TO BE SURE ---
 print(f"DEBUG: OpenRouter Key found: {os.getenv('OPENROUTER_KEY') is not None}")
 
 # Define where the generated reports will be stored temporarily
 DOWNLOADS_PATH = Path(__file__).parent / "downloads"
-
-# Automatically create the folder if it doesn't exist
 DOWNLOADS_PATH.mkdir(parents=True, exist_ok=True)
-
 print(f"DEBUG: Downloads path set to: {DOWNLOADS_PATH}")
 
 app = Flask(__name__)
+
 # --- 1. CLOUD CONFIGURATION ---
-# Secrets are now loaded from Environment Variables
 GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
 OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")
 MODEL = "qwen/qwen3.6-plus:free"
@@ -39,26 +34,22 @@ MODEL = "qwen/qwen3.6-plus:free"
 EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_PASS = os.getenv("EMAIL_PASS")
 
-# Relative Path Mapping (Works on GitHub/Linux/Windows)
+# Relative Path Mapping
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SKILLS_DIR = os.path.join(BASE_DIR, "skills")
 SCRIPTS_DIR = os.path.join(BASE_DIR, "scripts")
 
-# Paths for logic files
 GEO_BOOST_SKILL_PATH = os.path.join(SKILLS_DIR, "geo_boost_engine.skill.md")
-with open(os.path.join(SKILLS_DIR, "geo_report.skill.md"), 'r', encoding='utf-8') as f: schema = f.read()
 HTML_SKILL_PATH = os.path.join(SKILLS_DIR, "geo_html_schema.skill.md")
 
-# Generator Script Paths
 FULL_REPORT_EXE = os.path.join(SCRIPTS_DIR, "generate_html_report.py")
 TEASER_REPORT_EXE = os.path.join(SCRIPTS_DIR, "generate_html_report.py")
 
-# Output directory (Ensure this exists or use /tmp on cloud providers)
 OUTPUT_PATH = os.path.join(BASE_DIR, "output")
 if not os.path.exists(OUTPUT_PATH):
     os.makedirs(OUTPUT_PATH)
 
-# --- 2. SYSTEM PROMPT (The "Brain" Instructions) ---
+# --- 2. SYSTEM PROMPT ---
 SYSTEM_PROMPT = """
 You are the GEO Boost Intelligence Engine. Your goal is to generate a full visibility and revenue intelligence report in RAW JSON format.
 
@@ -102,7 +93,7 @@ def get_verified_business_data(biz_name, location, category):
         return None, None
 
 def send_email(to_email, file_path, biz_name, is_paid):
-    """Sends the HTML report as an attachment with correct MIME types for Chrome."""
+    """Sends the HTML report as an attachment."""
     msg = MIMEMultipart()
     msg['From'] = EMAIL_USER
     msg['To'] = to_email
@@ -150,26 +141,34 @@ def handle_form():
     Output Schema: {schema}"""
 
     try:
+        text = ""
         # 4. Request Analysis from OpenRouter
+        print(f"🤖 Calling OpenRouter ({MODEL})...")
         response = requests.post("https://openrouter.ai/api/v1/chat/completions",
             headers={"Authorization": f"Bearer {OPENROUTER_KEY}"},
-            json={"model": MODEL, "messages": [{"role": "user", "content": prompt}], "temperature": 0})
+            json={"model": MODEL, "messages": [
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": prompt}
+            ], "temperature": 0},
+            timeout=120)
+        
+        print(f"📡 OpenRouter HTTP status: {response.status_code}")
         ai_data = response.json()
 
         if 'choices' not in ai_data:
-            print(f"❌ AI Error Details: {json.dumps(ai_data, indent=2)}")
-            return jsonify({"status": "error", "message": "AI Engine failed to respond"}), 500
+            error_detail = json.dumps(ai_data, indent=2)
+            print(f"❌ AI Error Details: {error_detail}")
+            return jsonify({"status": "error", "message": "AI Engine failed to respond", "ai_error": ai_data}), 500
 
         text = ai_data['choices'][0]['message']['content'].strip()
         
-        # Robust JSON cleaning to prevent generator crashes
+        # Robust JSON cleaning
         if "```json" in text:
             text = text.split("```json")[1].split("```")[0].strip()
         elif "```" in text:
             text = text.split("```")[1].split("```")[0].strip()
 
         # 5. Process and Render Report
-        # Parse AI JSON and inject the is_paid flag so the HTML generator knows
         report_data = json.loads(text)
         report_data["is_paid"] = is_paid
         report_data["date"] = datetime.now().strftime("%Y-%m-%d")
@@ -182,12 +181,11 @@ def handle_form():
         prefix = "FULL_" if is_paid else "FREE_Teaser_"
         out_html = os.path.join(DOWNLOADS_PATH, f"{prefix}Report_{biz_name.replace(' ', '_')}.html")
         
-        # Execute generator with UTF-8 environment enforcement
         env = os.environ.copy()
         env["PYTHONIOENCODING"] = "utf-8"
         
         print(f"🎨 Rendering {prefix} report...")
-        result = subprocess.run(["python", script, temp_json, out_html], capture_output=True, text=True, env=env)
+        result = subprocess.run(["python3", script, temp_json, out_html], capture_output=True, text=True, env=env)
         
         if result.returncode != 0:
             print(f"❌ GENERATOR ERROR: {result.stderr}")
@@ -199,11 +197,18 @@ def handle_form():
             
         return jsonify({"status": "success", "message": "Report delivered successfully"})
         
+    except requests.exceptions.Timeout:
+        print("❌ OpenRouter request timed out (120s)")
+        return jsonify({"status": "error", "message": "AI request timed out after 120 seconds"}), 504
+    except json.JSONDecodeError as e:
+        print(f"❌ JSON PARSE ERROR: {e}\nRaw AI text: {text[:500]}")
+        return jsonify({"status": "error", "message": f"AI returned invalid JSON: {str(e)}", "raw_preview": text[:300]}), 500
     except Exception as e:
-        print(f"❌ SYSTEM CRASH: {e}")
+        import traceback
+        tb = traceback.format_exc()
+        print(f"❌ SYSTEM CRASH: {tb}")
         return jsonify({"status": "error", "message": str(e)}), 500
 
 if __name__ == '__main__':
     print("🚦 GEO Bridge Server Active on http://0.0.0.0:5000")
-    # host='0.0.0.0' tells AWS to allow outside traffic
     app.run(host='0.0.0.0', port=5000, debug=True)
