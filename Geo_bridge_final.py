@@ -14,6 +14,10 @@ from dotenv import load_dotenv
 from pathlib import Path
 import re
 
+# Force IPv4 — EC2 IPv6 causes 10s+ timeouts to OpenRouter/Cloudflare
+import requests.packages.urllib3.util.connection as urllib3_cn
+urllib3_cn.HAS_IPV6 = False
+
 # Load .env from same directory as this script
 env_path = Path(__file__).parent / '.env'
 load_dotenv(dotenv_path=env_path)
