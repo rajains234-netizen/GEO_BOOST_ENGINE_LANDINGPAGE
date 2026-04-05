@@ -23,8 +23,20 @@ import html as html_mod
 from datetime import datetime
 
 
+def safe_num(val, default=0):
+    """Safely convert any value to a number (AI models often return strings)."""
+    if val is None:
+        return default
+    try:
+        return float(val) if '.' in str(val) else int(val)
+    except (ValueError, TypeError):
+        return default
+
+
 def score_color(score, max_score=100):
     """3-color status system: green=good, amber=warning, red=critical."""
+    score = safe_num(score, 0)
+    max_score = safe_num(max_score, 100)
     pct = (score / max_score * 100) if max_score else 0
     if pct >= 60: return "#0D9488"    # green — good
     elif pct >= 40: return "#D97706"  # amber — warning
@@ -32,12 +44,14 @@ def score_color(score, max_score=100):
 
 
 def score_label(score):
+    score = safe_num(score, 0)
     if score >= 80: return "Dominating"
     elif score >= 50: return "Competitive but Leaking Revenue"
     else: return "Invisible / At Risk"
 
 
 def trust_label(score):
+    score = safe_num(score, 0)
     if score >= 8: return "High Trust"
     elif score >= 5: return "Moderate Trust"
     else: return "Low Trust"
@@ -61,20 +75,16 @@ def generate_html(data):
     # Extract data with defaults
     brand = data.get("brand_name", "Business")
     url = data.get("url", "")
-    
-    # --- FIXED: ALWAYS USE CURRENT DATE ---
-    date = datetime.now().strftime("%Y-%m-%d")
-    
+    date = data.get("date", datetime.now().strftime("%Y-%m-%d"))
     location = data.get("location", "")
     category = data.get("category", "")
     service_intent = data.get("service_intent", "")
     benchmark_note = data.get("benchmark_note", "")
-    _raw_paid = data.get("is_paid", False)
-    is_paid = str(_raw_paid).lower().strip() in ("true", "1", "yes") if isinstance(_raw_paid, str) else bool(_raw_paid)
+    is_paid = data.get("is_paid", False)
 
-    vis_score = data.get("visibility_score", 0)
-    trust_score = data.get("trust_score", 0)
-    trust_max = data.get("trust_score_max", 10)
+    vis_score = safe_num(data.get("visibility_score", 0))
+    trust_score = safe_num(data.get("trust_score", 0))
+    trust_max = safe_num(data.get("trust_score_max", 10), 10)
     ai_status = data.get("ai_status", "Unknown")
     rev_range = data.get("revenue_range", "$0")
 
@@ -147,8 +157,8 @@ def generate_html(data):
     # Build score breakdown HTML
     breakdown_html = ""
     for pillar, info in breakdown.items():
-        sc = info.get("score", 0)
-        mx = info.get("max", 25)
+        sc = safe_num(info.get("score", 0))
+        mx = safe_num(info.get("max", 25), 25)
         st = info.get("status", "")
         pct = (sc / mx * 100) if mx else 0
         clr = score_color(sc, mx)
@@ -207,6 +217,7 @@ def generate_html(data):
     # AI platforms progress bars
     ai_platforms_html = ""
     for name, sc in ai_platforms.items():
+        sc = safe_num(sc)
         clr = score_color(sc)
         ai_platforms_html += f'''
         <div class="progress-row">
@@ -302,7 +313,7 @@ def generate_html(data):
     for item in competitor_gap_no_action:
         comp_gap_noaction_html += f'<div class="action-item"><span class="action-bullet" style="color:#DC2626">&bull;</span><span>{item}</span></div>'
 
-    # Blur overlay HTML + CSS for gated sections (only when not paid)
+    # Blur overlay HTML for gated sections (only when not paid)
     if not is_paid:
         blur_overlay = '''<div class="blur-overlay">
             <div class="lock-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
@@ -312,36 +323,9 @@ def generate_html(data):
         </div>'''
         gate_start = '<div class="blur-gate"><div class="blur-content">'
         gate_end = f'</div>{blur_overlay}</div>'
-        blur_css = '''/* BLURRED / GATED SECTIONS */
-.blur-gate{position:relative;overflow:hidden}
-.blur-gate .blur-content{filter:blur(6px);-webkit-filter:blur(6px);pointer-events:none;user-select:none;-webkit-user-select:none}
-.blur-gate .blur-overlay{
-  position:absolute;inset:0;z-index:10;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:rgba(248,250,252,0.55);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
-}
-.blur-overlay .lock-icon{
-  width:52px;height:52px;border-radius:50%;background:var(--navy);
-  display:flex;align-items:center;justify-content:center;margin-bottom:14px;
-  box-shadow:0 4px 16px rgba(15,23,42,0.18);
-}
-.blur-overlay .lock-icon svg{width:24px;height:24px;fill:none;stroke:var(--white);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.blur-overlay .lock-title{font-size:16px;font-weight:800;color:var(--charcoal);margin-bottom:4px}
-.blur-overlay .lock-sub{font-size:13px;color:var(--mid-gray);margin-bottom:18px;text-align:center;max-width:340px;line-height:1.5}
-.blur-overlay .unlock-btn{
-  display:inline-block;padding:12px 32px;border-radius:8px;
-  background:linear-gradient(135deg,#0F172A,#1E3A5F);color:var(--white);
-  font-size:13px;font-weight:700;letter-spacing:0.5px;text-decoration:none;
-  box-shadow:0 4px 14px rgba(15,23,42,0.25);transition:transform .2s,box-shadow .2s;cursor:pointer;border:none;
-}
-.blur-overlay .unlock-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(15,23,42,0.35)}'''
-        blur_print_css = '''  .blur-gate .blur-content{filter:none !important;-webkit-filter:none !important;pointer-events:auto;user-select:auto}
-  .blur-gate .blur-overlay{display:none !important}'''
     else:
         gate_start = ''
         gate_end = ''
-        blur_css = ''
-        blur_print_css = ''
 
     # Nav items
     nav_items = [
@@ -648,7 +632,31 @@ body{{font-family:var(--font-sans);color:var(--charcoal);background:var(--off-wh
   .score-ring-wrap{{flex-direction:column;align-items:flex-start}}
 }}
 
-{blur_css}
+/* ============================================================
+   BLURRED / GATED SECTIONS
+   ============================================================ */
+.blur-gate{{position:relative;overflow:hidden}}
+.blur-gate .blur-content{{filter:blur(6px);-webkit-filter:blur(6px);pointer-events:none;user-select:none;-webkit-user-select:none}}
+.blur-gate .blur-overlay{{
+  position:absolute;inset:0;z-index:10;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(248,250,252,0.55);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+}}
+.blur-overlay .lock-icon{{
+  width:52px;height:52px;border-radius:50%;background:var(--navy);
+  display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+  box-shadow:0 4px 16px rgba(15,23,42,0.18);
+}}
+.blur-overlay .lock-icon svg{{width:24px;height:24px;fill:none;stroke:var(--white);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}}
+.blur-overlay .lock-title{{font-size:16px;font-weight:800;color:var(--charcoal);margin-bottom:4px}}
+.blur-overlay .lock-sub{{font-size:13px;color:var(--mid-gray);margin-bottom:18px;text-align:center;max-width:340px;line-height:1.5}}
+.blur-overlay .unlock-btn{{
+  display:inline-block;padding:12px 32px;border-radius:8px;
+  background:linear-gradient(135deg,#0F172A,#1E3A5F);color:var(--white);
+  font-size:13px;font-weight:700;letter-spacing:0.5px;text-decoration:none;
+  box-shadow:0 4px 14px rgba(15,23,42,0.25);transition:transform .2s,box-shadow .2s;cursor:pointer;border:none;
+}}
+.blur-overlay .unlock-btn:hover{{transform:translateY(-2px);box-shadow:0 6px 20px rgba(15,23,42,0.35)}}
 
 /* ============================================================
    PRINT STYLES
@@ -664,15 +672,18 @@ body{{font-family:var(--font-sans);color:var(--charcoal);background:var(--off-wh
   .progress-fill{{width:var(--fill-width) !important}}
   body{{font-size:12px;background:white}}
   .revenue-hero{{break-inside:avoid}}
-{blur_print_css}
+  .blur-gate .blur-content{{filter:none !important;-webkit-filter:none !important;pointer-events:auto;user-select:auto}}
+  .blur-gate .blur-overlay{{display:none !important}}
   @page{{margin:0.7in}}
 }}
 </style>
 </head>
 <body>
 
+<!-- Mobile Toggle -->
 <button class="mobile-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
 
+<!-- Sidebar Navigation -->
 <aside class="sidebar">
   <div class="sidebar-brand">
     <h2>GEO Boost Engine</h2>
@@ -685,8 +696,10 @@ body{{font-family:var(--font-sans);color:var(--charcoal);background:var(--off-wh
   </div>
 </aside>
 
+<!-- Main Content -->
 <div class="main">
 
+  <!-- ========== COVER ========== -->
   <section class="cover" id="cover">
     <div class="cover-label">Revenue Recovery Report</div>
     <h1>GEO Boost <span>Engine</span></h1>
@@ -738,6 +751,7 @@ body{{font-family:var(--font-sans);color:var(--charcoal);background:var(--off-wh
     </div>
   </section>
 
+  <!-- ========== S1: REALITY CHECK ========== -->
   <section class="section" id="reality">
     <div class="section-header">
       <div class="section-accent" style="background:#6366F1"></div>
@@ -747,6 +761,7 @@ body{{font-family:var(--font-sans);color:var(--charcoal);background:var(--off-wh
     {"".join(f'<p>{esc(d)}</p>' for d in reality_detail)}
   </section>
 
+  <!-- ========== S2: VISIBILITY SCORE ========== -->
   <section class="section" id="score">
     <div class="section-header">
       <div class="section-accent" style="background:var(--steel)"></div>
@@ -756,6 +771,7 @@ body{{font-family:var(--font-sans);color:var(--charcoal);background:var(--off-wh
     {f'<p class="muted" style="margin-top:12px;font-size:12px">{esc(benchmark_note)}</p>' if benchmark_note else ''}
   </section>
 
+  <!-- ========== S3: BUYER JOURNEY ========== -->
   <section class="section" id="journey">
     <div class="section-header">
       <div class="section-accent" style="background:var(--steel)"></div>
@@ -766,6 +782,7 @@ body{{font-family:var(--font-sans);color:var(--charcoal);background:var(--off-wh
     {f'<div class="callout blue" style="margin-top:16px">{esc(journey_summary)}</div>' if journey_summary else ''}
   </section>
 
+  <!-- ========== S4: WHY IGNORED ========== -->
   <section class="section" id="ignored">
     <div class="section-header">
       <div class="section-accent" style="background:#6366F1"></div>
@@ -774,6 +791,7 @@ body{{font-family:var(--font-sans);color:var(--charcoal);background:var(--off-wh
     {ignore_html}
   </section>
 
+  <!-- ========== S5: TRUST SCORE ========== -->
   <section class="section" id="trust">
     <div class="section-header">
       <div class="section-accent" style="background:var(--steel)"></div>
@@ -787,6 +805,7 @@ body{{font-family:var(--font-sans);color:var(--charcoal);background:var(--off-wh
     {f'<p>{esc(trust_expl)}</p>' if trust_expl else ''}
   </section>
 
+  <!-- ========== S6: AI VISIBILITY ========== -->
   <section class="section" id="ai">
     <div class="section-header">
       <div class="section-accent" style="background:var(--steel)"></div>
@@ -801,6 +820,7 @@ body{{font-family:var(--font-sans);color:var(--charcoal);background:var(--off-wh
     {ai_platforms_html}
   </section>
 
+  <!-- ========== S7: COMPETITORS ========== -->
   <section class="section" id="competitors">
     <div class="section-header">
       <div class="section-accent" style="background:var(--steel)"></div>
@@ -810,6 +830,7 @@ body{{font-family:var(--font-sans);color:var(--charcoal);background:var(--off-wh
     {(''.join(f'<div class="action-item" style="margin-top:4px"><span class="action-bullet">&bull;</span><span>{s}</span></div>' for s in comp_summary) if isinstance(comp_summary, list) else f'<p style="margin-top:14px">{esc(comp_summary)}</p>') if comp_summary else ''}
   </section>
 
+  <!-- ========== S8: REVENUE LEAK ========== -->
   <section class="section" id="revenue">
     <div class="section-header">
       <div class="section-accent" style="background:var(--steel)"></div>
@@ -825,6 +846,7 @@ body{{font-family:var(--font-sans);color:var(--charcoal);background:var(--off-wh
     {f'<p style="margin-top:12px">{esc(rev_statement)}</p>' if rev_statement else ''}
   </section>
 
+  <!-- ========== S9: ACTION PLAN ========== -->
   <section class="section" id="plan">
     <div class="section-header">
       <div class="section-accent" style="background:var(--steel)"></div>
@@ -842,6 +864,7 @@ body{{font-family:var(--font-sans);color:var(--charcoal);background:var(--off-wh
     {gate_end}
   </section>
 
+  <!-- ========== S10: 48-HOUR AI CITABILITY QUICK-START ========== -->
   <section class="section" id="citability">
     <div class="section-header">
       <div class="section-accent" style="background:#D97706"></div>
@@ -866,6 +889,7 @@ body{{font-family:var(--font-sans);color:var(--charcoal);background:var(--off-wh
     {gate_end}
   </section>
 
+  <!-- ========== S11: COMPETITOR AI VISIBILITY GAP ========== -->
   <section class="section" id="compgap">
     <div class="section-header">
       <div class="section-accent" style="background:#DC2626"></div>
@@ -892,6 +916,7 @@ body{{font-family:var(--font-sans);color:var(--charcoal);background:var(--off-wh
     {gate_end}
   </section>
 
+  <!-- ========== S12: AI SHIFT ========== -->
   <section class="section" id="shift">
     <div class="section-header">
       <div class="section-accent" style="background:var(--steel)"></div>
@@ -903,6 +928,7 @@ body{{font-family:var(--font-sans);color:var(--charcoal);background:var(--off-wh
     {gate_end}
   </section>
 
+  <!-- ========== S11: FULL PICTURE ========== -->
   <section class="section" id="matters">
     <div class="section-header">
       <div class="section-accent" style="background:var(--slate)"></div>
@@ -912,6 +938,7 @@ body{{font-family:var(--font-sans);color:var(--charcoal);background:var(--off-wh
     {f'<p style="margin-top:16px">{esc(full_picture_end)}</p>' if full_picture_end else ''}
   </section>
 
+  <!-- ========== S14: NEXT STEPS ========== -->
   <section class="section" id="next">
     <div class="section-header">
       <div class="section-accent" style="background:var(--steel)"></div>
