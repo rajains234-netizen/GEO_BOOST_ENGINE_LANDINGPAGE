@@ -247,6 +247,29 @@ You’ll receive your report within 5–10 minutes.
               </li>
             </ul>
           </div>
+{/* SMS Consent Checkbox */}
+<div className="mt-3 text-left">
+  <label className="text-xs text-zinc-400 flex items-start gap-2">
+    <input
+      type="checkbox"
+      required
+      className="mt-1"
+    />
+    <span>
+      I agree to receive SMS messages regarding my audit report and service updates.
+      Message frequency varies. Message & data rates may apply.
+      Reply STOP to opt out.
+    </span>
+  </label>
+</div>
+
+{/* Policy Text */}
+<p className="text-xs text-center text-zinc-600 mt-2">
+  
+  By submitting, you agree to our{" "}
+  <a href="/privacy-policy" className="underline">Privacy Policy</a> and{" "}
+  <a href="/terms" className="underline">Terms of Service</a>.
+</p>
 
           {/* Submit Button */}
           <button
@@ -268,7 +291,7 @@ You’ll receive your report within 5–10 minutes.
           </button>
 
           <p className="text-xs text-center text-zinc-600">
-            No credit card required • Delivered via email
+            No credit card required • Delivered via email & SMS
           </p>
         </form>
       </div>
