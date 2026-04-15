@@ -263,17 +263,7 @@ const LandingPage = () => {
               Right now, customers are asking AI tools for recommendations… and your competitors are getting picked — not you. We show you exactly why — and fix it.
             </p>
 
-            {/* CTA Button */}
-            <div className={`mb-8 ${isVisible.hero ? 'animate-fade-up delay-300' : 'opacity-0'}`}>
-              <button 
-                onClick={() => handleCTAClick('hero')}
-                className="cta-button text-lg px-10 py-5 animate-pulse-glow"
-                data-testid="hero-cta"
-              >
-                Get My AI Revenue Recovery System – $199
-                <ArrowRight className="w-5 h-5" />
-              </button>
-            </div>
+            
 
             {/* Trust indicators below CTA */}
             <div 
