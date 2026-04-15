@@ -107,11 +107,11 @@ const LandingPage = () => {
   const faqItems = [
     {
       question: "What exactly is this report?",
-      answer: "The AI Visibility Report is a comprehensive audit of how your business appears across AI platforms like ChatGPT, Google AI, Bing Copilot, and Perplexity. We analyze 30+ visibility signals to show you exactly why AI tools may or may not be recommending your business to potential customers."
+      answer: "The AI Revenue Recovery System is a comprehensive audit of how your business appears across AI platforms like ChatGPT, Google AI, Bing Copilot, and Perplexity. We analyze 30+ visibility signals to show you exactly why AI tools may or may not be recommending your business to potential customers."
     },
     {
       question: "How fast do I get my report?",
-      answer: "Your personalized AI Visibility Report is delivered within 24-48 hours of purchase. No calls, no waiting around. It's sent directly to your email with a detailed breakdown and actionable fixes."
+      answer: "Your personalized AI Revenue Recovery System is delivered within 24-48 hours of purchase. No calls, no waiting around. It's sent directly to your email with a detailed breakdown and actionable fixes."
     },
     {
       question: "Is this relevant for my type of business?",
@@ -270,7 +270,7 @@ const LandingPage = () => {
                 className="cta-button text-lg px-10 py-5 animate-pulse-glow"
                 data-testid="hero-cta"
               >
-                Get My AI Visibility Report – $199
+                Get My AI Revenue Recovery System – $199
                 <ArrowRight className="w-5 h-5" />
               </button>
             </div>
@@ -722,7 +722,7 @@ const LandingPage = () => {
                 className="cta-button w-full text-lg py-5 animate-pulse-glow"
                 data-testid="pricing-cta"
               >
-                Get My AI Visibility Report – $199
+                Get My AI Revenue Recovery System – $199
                 <ArrowRight className="w-5 h-5" />
               </button>
 
@@ -824,14 +824,7 @@ const LandingPage = () => {
               <p className="text-lg text-zinc-400 mb-10 max-w-xl mx-auto">
                 Every day you wait, your competitors get stronger in AI search. Get the insights you need to take back your visibility.
               </p>
-              <button 
-                onClick={() => handleCTAClick('final')}
-                className="cta-button text-lg px-10 py-5 animate-pulse-glow"
-                data-testid="final-cta-button"
-              >
-                Get My AI Visibility Report – $199
-                <ArrowRight className="w-5 h-5" />
-              </button>
+          
               <p className="text-sm text-zinc-600 mt-6">
                 Join 847+ businesses who've improved their AI visibility
               </p>
