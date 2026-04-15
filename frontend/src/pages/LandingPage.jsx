@@ -152,7 +152,7 @@ const LandingPage = () => {
       revenue: "+$8,200/month",
       stars: 4,
       before: "My competitor down the street was stealing all my customers.",
-      quote: "Best $199 I ever spent. The report showed me exactly why my competitor was getting recommended instead of me. Fixed it in 2 days. Now I beat him on every AI platform. Top recommendation in my area.",
+      quote: "Best $299 I ever spent. The report showed me exactly why my competitor was getting recommended instead of me. Fixed it in 2 days. Now I beat him on every AI platform. Top recommendation in my area.",
       name: "Tom Bradley",
       role: "Owner, Bradley Plumbing",
       image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=100&w=100",
@@ -681,7 +681,7 @@ const LandingPage = () => {
             <div className={`text-center mb-12 ${isVisible.pricing ? 'animate-fade-up' : 'opacity-0'}`} style={{ animationFillMode: 'both' }}>
               <span className="text-emerald-400 text-sm font-semibold uppercase tracking-widest">Pricing</span>
               <h2 className="text-3xl sm:text-4xl font-bold mt-4" data-testid="pricing-title">
-                What You Get ($199)
+                What You Get ($299)
               </h2>
             </div>
 
@@ -703,7 +703,7 @@ const LandingPage = () => {
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold">Today's Price</span>
-                  <span className="text-4xl font-extrabold text-emerald-400">$199</span>
+                  <span className="text-4xl font-extrabold text-emerald-400">$299</span>
                 </div>
               </div>
 
@@ -712,7 +712,7 @@ const LandingPage = () => {
                 className="cta-button w-full text-lg py-5 animate-pulse-glow"
                 data-testid="pricing-cta"
               >
-                Get My AI Revenue Recovery System – $199
+                Get My AI Revenue Recovery System – $299
                 <ArrowRight className="w-5 h-5" />
               </button>
 
@@ -841,7 +841,7 @@ const LandingPage = () => {
           onClick={() => handleCTAClick('mobile-sticky')}
           className="cta-button w-full py-3.5 text-base"
         >
-          AI Revenue Recovery System – $199
+          AI Revenue Recovery System – $299
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>
@@ -855,7 +855,7 @@ const LandingPage = () => {
           onClick={() => handleCTAClick('desktop-sticky')}
           className="cta-button py-4 px-8 shadow-2xl"
         >
-          AI Revenue Recovery System – $199
+          AI Revenue Recovery System – $299
           <ArrowRight className="w-5 h-5" />
         </button>
       </div>
