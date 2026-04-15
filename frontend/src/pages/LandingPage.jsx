@@ -841,7 +841,7 @@ const LandingPage = () => {
           onClick={() => handleCTAClick('mobile-sticky')}
           className="cta-button w-full py-3.5 text-base"
         >
-          Get Full Report – $199
+          AI Revenue Recovery System – $199
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>
@@ -855,7 +855,7 @@ const LandingPage = () => {
           onClick={() => handleCTAClick('desktop-sticky')}
           className="cta-button py-4 px-8 shadow-2xl"
         >
-          Get Full Report – $199
+          AI Revenue Recovery System – $199
           <ArrowRight className="w-5 h-5" />
         </button>
       </div>
