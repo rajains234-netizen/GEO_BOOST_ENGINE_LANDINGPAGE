@@ -256,9 +256,10 @@ You’ll receive your report within 5–10 minutes.
       className="mt-1"
     />
     <span>
-      I agree to receive SMS messages regarding my audit report and service updates.
-      Message frequency varies. Message & data rates may apply.
-      Reply STOP to opt out.
+      By providing your phone number, you agree to receive automated promotional and personalized marketing text messages (e.g., service updates and SEO tips) from AI GEO Boost at the cell number used when signing up.
+      Consent is not a condition of any purchase. Reply HELP for help and STOP to cancel.
+      Msg frequency varies. Msg & data rates may apply. 
+      View our [Privacy Policy] and [Terms of Service].
     </span>
   </label>
 </div>
