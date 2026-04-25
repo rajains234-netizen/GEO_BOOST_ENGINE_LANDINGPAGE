@@ -830,7 +830,7 @@ const LandingPage = () => {
             GEO<span className="text-emerald-400">Boost</span>
           </div>
           <p className="text-sm text-zinc-600">
-            © Citacy and GEO Boost are digital service brands owned and operated by Raja Gudipudi.
+            © Citacy and GEO Boost are digital service brands owned and operated by Raja Gudipudi 4260 NW DUNIWAY DR CORVALLIS OR 97330.
           </p>
         </div>
       </footer>
