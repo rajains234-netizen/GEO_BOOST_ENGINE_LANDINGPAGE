@@ -267,8 +267,8 @@ You’ll receive your report within 5–10 minutes.
 <p className="text-xs text-center text-zinc-600 mt-2">
   
   By submitting, you agree to our{" "}
-  <a href="/privacy-policy" className="underline">Privacy Policy</a> and{" "}
-  <a href="/terms" className="underline">Terms of Service</a>.
+  <a href="https://citacy.com/privacy.html" className="underline">Privacy Policy</a> and{" "}
+  <a href="https://citacy.com/terms.html" className="underline">Terms of Service</a>.
 </p>
 
           {/* Submit Button */}
